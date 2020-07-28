@@ -26,6 +26,6 @@ c、gulp buildJK --- 不压缩图片，不注入Polyfill，不启动打包后的
 d、gulp build0 --- 压缩图片，注入Polyfill，启动打包后的项目  
 
 # 三、注意事项
-1、请严格按照预设好的项目目录结构编写css、js及html文件，别移动文件位置哦；
+1、请严格按照预设好的项目目录结构编写css、js及html文件，别移动文件位置哦；   
 2、内联在html中的css、js不会进行兼容性优化、压缩及添加hash值；   
 3、确保自己的html文件中`<head>`和`<meta>`相邻，因为插入polyfill.min.js 需要利用这两个标签来定位；   
