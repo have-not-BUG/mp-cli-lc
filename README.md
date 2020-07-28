@@ -13,7 +13,7 @@ i、接入了fundebug 错误监控系统
 # 二、使用方法
 #### （一）、初始化
 1、下载该项目后 ```npm install```；  
-2、在控制台运行```node bin/init``` (如果觉得输太多，可以执行 `npm link`，后面只要执行 `init`即可)按照提示输入 项目名称、html文件名(首次初始化时建议使用`index`名称)、网页title、fundebug的apikey及选择是否引入jQuery；     
+2、在控制台运行```npm run init```或 ```node bin/init``` (如果觉得输太多，可以执行 `npm link`，后面只要执行 `init`即可)按照提示输入 项目名称、html文件名(首次初始化时建议使用`index`名称)、网页title、fundebug的apikey及选择是否引入jQuery；     
 
 #### （二）、编写代码
 1、执行```gulp``` 启动项目;       
