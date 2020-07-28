@@ -1,0 +1,188 @@
+#!/usr/bin/env node
+
+const Handlebars = require('handlebars')
+// 交互式命令行
+const inquirer = require('inquirer')
+// 修改控制台字符串的样式
+const chalk = require('chalk')
+// node 内置文件模块
+const fs = require('fs')
+// 读取根目录下的 template.json
+var htmlTemplet='';
+
+fs.readFile(`${__dirname}/../htmlTemplate/doNotChangeIt.html`, null, function(error, data) {
+    if(error){
+        console.log('读取index.html文件出错了'+error)
+    }else {
+        htmlTemplet=data.toString()
+        // console.log('成功读取index.html'+htmlTemplet)
+
+
+    }
+
+})
+
+// const htmlTemplet = JSON.stringify(require(`${__dirname}/../workspace/index.html`))
+// console.log('htmlTemplet===',htmlTemplet)
+// const htmlTemplet = "<!DOCTYPE html>\n" +
+//     "<html lang=\"zh-CN\">\n" +
+//     "<head>\n" +
+//     "    <meta charset=\"UTF-8\">\n" +
+//     "    <meta content=\"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no\"\n" +
+//     "          name=\"viewport\">\n" +
+//     "    <title>多页面模版</title>\n" +
+//     "     <!--第一步、强烈建议在此处尽早引入fundebug。 注意! 记得填入自己的apikey  -->\n" +
+//     "    <script src=\"https://js.fundebug.cn/fundebug.2.0.0.min.js\" crossorigin=\"anonymous\"></script>\n" +
+//     "    <script>\n" +
+//     "        // fundebug初始化 记得填入自己的apikey\n" +
+//     "        if (\"fundebug\" in window) {\n" +
+//     "            fundebug.init({\n" +
+//     "                apikey: '{{apikey}}',\n" +
+//     "                // silentDev: true, // 开发环境不启用fundebug\n" +
+//     "                silentConsole: true,\n" +
+//     "                setHttpBody: true\n" +
+//     "            });\n" +
+//     "        }\n" +
+//     "    </script>\n" +
+//     "     <!--第二步、引入资源及api异常监控插件(也是尽早引入)-->\n" +
+//     "    <script src=\"https://h5.4417.com/ios/js/notchange/monitorFileApiError.js?name={{projectName}}&allWrapId=allWrap\"\n" +
+//     "            data-attr=\"monitor-file-api-error\"></script>\n" +
+//     "    <!--说明\n" +
+//     "    1、data-attr=\"monitor-file-api-error\" 记得加上，请勿修改或遗漏 --必填\n" +
+//     "    2、name表示你的项目名称，记得改 --必填\n" +
+//     "    3、allWrapId表示如果接口异常（网络错误）或资源加载失败时，你想在html上的id为allWrap的原生元素上 innerText 相应的文字 --非必填   -->\n" +
+//     "\n" +
+//     "    <!--第三步、引入反馈网页问题样式-->\n" +
+//     "    <link rel=\"stylesheet\" href=\"https://h5.4417.com/ios/css/reprot-response-width-0e08055edc.css\">\n" +
+//     "\n" +
+//     "\n" +
+//     "</head>\n" +
+//     "<body>\n" +
+//     "<div id=\"allWrap\">多页面模版\n" +
+//     "</div>\n" +
+//     "</body>\n" +
+//     "<script src=\"js/notchange/jQuery.v1.12.4.js\"></script>\n" +
+//     " <!--第四步、引入反馈网页问题js-->\n" +
+//     "<script src=\"https://h5.4417.com/ios/js/notchange/reportself.js?name={{projectName}}&notStorageKeys=storage1,storage1\"  data-attr=\"licai-reportself\"></script>\n" +
+//     "<!--说明\n" +
+//     "1、data-attr=\"licai-reportself\" 记得加上，请勿修改或遗漏 --必填\n" +
+//     "2、name表示你的项目名称，记得改 --必填\n" +
+//     "3、notStorageKeys表示你不想传递给后台的localStorage及sessionStorage的key值，支持多个，中间用英文, 分隔 --非必填   -->\n" +
+//     "\n" +
+//     "\n" +
+//     "\n" +
+//     "</html>\n"
+
+
+
+// var data = { "name": "Alan",
+//     "hometown": "Somewhere, TX",
+//     "kids": [{"name": "Jimmy", "age": "12"}, {"name": "Sally", "age": "4"}]
+// };
+//
+// var result = HandlebarsComp(data);
+
+
+
+// 自定义交互式命令行的问题及简单的校验
+let question = [
+    {
+        name: "projectName",
+        type: 'input',
+        message: "请输入项目名称",
+        validate (val) {
+            if (val === '') return '项目名称为必填项!'
+            return true
+        }
+    },
+    {
+        name: "htmlName",
+        type: 'input',
+        message: "请输入html文件名",
+        validate (val) {
+            if (val === '') return 'html文件名为必填项!'
+            return true
+        }
+    },
+    {
+        name: "title",
+        type: 'input',
+        message: "请输入页面标题title",
+        validate (val) {
+            if (val === '') return '页面标题title为必填项!'
+            return true
+        }
+    },
+    {
+        name: "apikey",
+        type: 'input',
+        message: "请输入您的fundebug的apikey",
+        validate (apikey) {
+            if (apikey === '') {
+                return 'apikey为必填项!'
+            }else if (apikey.length<64){
+                return 'apikey位数小于64!'
+            }else {
+                return true
+            }
+        }
+    },
+    {
+        name: "isInjectJQ",
+        type: 'confirm',
+        message: "是否引入jQuery？"
+        // validate (apikey) {
+        //     if (apikey === '') {
+        //         return 'apikey为必填项!'
+        //     }else if (apikey.length<64){
+        //         return 'apikey位数小于64!'
+        //     }else {
+        //         return true
+        //     }
+        // }
+    }
+
+]
+
+inquirer
+    .prompt(question).then(answers => {
+    // answers 就是用户输入的内容，是个对象
+    let {projectName,htmlName,title,apikey,isInjectJQ } = answers;
+
+var HandlebarsComp = Handlebars.compile(htmlTemplet);
+
+var htmlResult = HandlebarsComp(answers);
+
+// console.log('answers====',answers)
+// console.log('htmlTemplet====',htmlTemplet)
+// // 过滤 unicode 字符
+// htmlTemplet[name] = url.replace(/[\u0000-\u0019]/g, '')
+// // 把模板信息写入 template.json 文件中
+// fs.writeFile(`${__dirname}/../template.json`, JSON.stringify(htmlTemplet), 'utf-8', err => {
+//     if (err) console.log(err)
+// console.log('\n')
+// console.log(chalk.green('Added successfully!\n'))
+// console.log(chalk.grey('The latest template list is: \n'))
+// console.log(htmlTemplet)
+// console.log('\n')
+// })
+
+fs.writeFile(`${__dirname}/../workspace/${htmlName}.html`, htmlResult, 'utf8', err => {
+    if (err) console.log(err)
+console.log('\n')
+console.log(chalk.green(`初始化成功，已在workspace目录下新建了${htmlName}文件\n`))
+// console.log(chalk.grey('开始编写代码吧 \n'))
+// console.log('htmlResult')
+console.log('\n')
+})
+// // 写入文件
+// var  writerStream = fs.createWriteStream(`${htmlName}.html`);
+// writerStream.write(htmlResult.toString(), 'UTF8');
+// writerStream.end();
+
+})
+
+// 输入fundebug apikey
+// 输入项目名称
+// 输入文件名名称
+// 输入网页标题

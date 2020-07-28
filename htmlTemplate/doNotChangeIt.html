@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no"
           name="viewport">
-    <title>多页面模版</title>
-     <!--第一步、强烈建议在此处尽早引入fundebug-->
+    <title>{{title}}</title>
+     <!--第一步、强烈建议在此处尽早引入fundebug。 注意! 记得填入自己的apikey  -->
     <script src="https://js.fundebug.cn/fundebug.2.0.0.min.js" crossorigin="anonymous"></script>
     <script>
+        // fundebug初始化 记得填入自己的apikey
         if ("fundebug" in window) {
             fundebug.init({
-                apikey: "881addf95f8f5a307e38418bc3ac5e85984736ab86b32c9870e1aee52e27deec",
-                silentDev: true,
+                apikey: '{{apikey}}',
+                // silentDev: true, // 开发环境不启用fundebug
                 silentConsole: true,
                 setHttpBody: true
             });
         }
     </script>
      <!--第二步、引入资源及api异常监控插件(也是尽早引入)-->
-    <script src="https://h5.4417.com/ios/js/notchange/monitorFileApiError.js?name=你的项目名称&allWrapId=allWrap"
+    <script src="https://h5.4417.com/ios/js/notchange/monitorFileApiError.js?name={{projectName}}&allWrapId=allWrap"
             data-attr="monitor-file-api-error"></script>
     <!--说明
     1、data-attr="monitor-file-api-error" 记得加上，请勿修改或遗漏 --必填
@@ -31,12 +32,15 @@
 
 </head>
 <body>
-<div id="allWrap">多页面模版</div>
+<div id="allWrap">
+    欢迎使用模板
+</div>
 </body>
+{{#if isInjectJQ}}
 <script src="js/notchange/jQuery.v1.12.4.js"></script>
+{{/if}}
  <!--第四步、引入反馈网页问题js-->
-<script src="https://h5.4417.com/ios/js/notchange/reportself.js?name=你的项目名称&notStorageKeys=storage1,storage1"  data-attr="licai-reportself"></script>
-
+<script src="https://h5.4417.com/ios/js/notchange/reportself.js?name={{projectName}}&apikey={{apikey}}&notStorageKeys=storage1,storage1"  data-attr="licai-reportself"></script>
 <!--说明
 1、data-attr="licai-reportself" 记得加上，请勿修改或遗漏 --必填
 2、name表示你的项目名称，记得改 --必填
