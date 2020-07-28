@@ -5,10 +5,10 @@
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no"
           name="viewport">
     <title>{{title}}</title>
-     <!--第一步、强烈建议在此处尽早引入fundebug。 注意! 记得填入自己的apikey  -->
+     <!--引入fundebug。  -->
     <script src="https://js.fundebug.cn/fundebug.2.0.0.min.js" crossorigin="anonymous"></script>
     <script>
-        // fundebug初始化 记得填入自己的apikey
+        // fundebug初始化
         if ("fundebug" in window) {
             fundebug.init({
                 apikey: '{{apikey}}',
@@ -18,15 +18,15 @@
             });
         }
     </script>
-     <!--第二步、引入资源及api异常监控插件(也是尽早引入)-->
+     <!--引入资源及api异常监控插件-->
     <script src="https://h5.4417.com/ios/js/notchange/monitorFileApiError.js?name={{projectName}}&allWrapId=allWrap"
             data-attr="monitor-file-api-error"></script>
     <!--说明
-    1、data-attr="monitor-file-api-error" 记得加上，请勿修改或遗漏 --必填
-    2、name表示你的项目名称，记得改 --必填
+    1、data-attr="monitor-file-api-error" 请勿修改或遗漏 --必填
+    2、name表示你的项目名称 --必填
     3、allWrapId表示如果接口异常（网络错误）或资源加载失败时，你想在html上的id为allWrap的原生元素上 innerText 相应的文字 --非必填   -->
 
-    <!--第三步、引入反馈网页问题样式-->
+    <!--引入反馈网页问题样式-->
     <link rel="stylesheet" href="https://h5.4417.com/ios/css/reprot-response-width-0e08055edc.css">
 
 
@@ -39,11 +39,11 @@
 {{#if isInjectJQ}}
 <script src="js/notchange/jQuery.v1.12.4.js"></script>
 {{/if}}
- <!--第四步、引入反馈网页问题js-->
+ <!--引入反馈网页问题js-->
 <script src="https://h5.4417.com/ios/js/notchange/reportself.js?name={{projectName}}&apikey={{apikey}}&notStorageKeys=storage1,storage1"  data-attr="licai-reportself"></script>
 <!--说明
-1、data-attr="licai-reportself" 记得加上，请勿修改或遗漏 --必填
-2、name表示你的项目名称，记得改 --必填
+1、data-attr="licai-reportself" 请勿修改或遗漏 --必填
+2、name表示你的项目名称 --必填
 3、notStorageKeys表示你不想传递给后台的localStorage及sessionStorage的key值，支持多个，中间用英文, 分隔 --非必填   -->
 
 

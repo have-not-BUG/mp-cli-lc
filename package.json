@@ -71,11 +71,6 @@
   },
   "description": "",
   "bin": {
-    "xr": "bin/xr",
-    "xr-add": "bin/xr-add",
-    "xr-delete": "bin/xr-delete",
-    "xr-list": "bin/xr-list",
-    "xr-init": "bin/xr-init",
-    "mpage-init": "bin/mpage-init"
+    "init": "bin/init"
   }
 }

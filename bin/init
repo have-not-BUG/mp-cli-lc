@@ -170,10 +170,10 @@ var htmlResult = HandlebarsComp(answers);
 fs.writeFile(`${__dirname}/../workspace/${htmlName}.html`, htmlResult, 'utf8', err => {
     if (err) console.log(err)
 console.log('\n')
-console.log(chalk.green(`初始化成功，已在workspace目录下新建了${htmlName}文件\n`))
-// console.log(chalk.grey('开始编写代码吧 \n'))
+console.log(chalk.green(`已在workspace下新建了${htmlName}文件,在控制台执行'gulp'即可启动项目(前提是新建了index.html文件)\n`))
+// console.log(chalk.grey('请不要移动项目文件哦\n'))
 // console.log('htmlResult')
-console.log('\n')
+// console.log('\n')
 })
 // // 写入文件
 // var  writerStream = fs.createWriteStream(`${htmlName}.html`);
