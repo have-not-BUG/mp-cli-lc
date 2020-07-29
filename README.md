@@ -26,7 +26,7 @@ i、实时监控文件变化后刷新页面(即支持热更新)；
 完成项目后在控制台执行```gulp build```会打包你的项目至workspace/dist文件夹中并打开浏览器运行你打包后的项目；不同指令，打包的结果不一样:    
 a、gulp build --- 不压缩图片，不注入Polyfill，启动打包后的项目   
 b、gulp buildES --- 不压缩图片，但注入Polyfill，启动打包后的项目      
-c、gulp buildJK --- 不压缩图片，不注入Polyfill，不启动打包后的项目  【Jenkins上部署时采用】
+c、gulp buildJK --- 不压缩图片，不注入Polyfill，不启动打包后的项目  【Jenkins上部署时采用】   
 d、gulp build0 --- 压缩图片，注入Polyfill，启动打包后的项目  
 
 # 三、注意事项
