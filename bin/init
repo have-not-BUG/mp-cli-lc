@@ -9,12 +9,37 @@ const chalk = require('chalk')
 const fs = require('fs')
 // 读取根目录下的 template.json
 var htmlTemplet='';
+var cssTemplet='';
+var jsTemplet='';
 
-fs.readFile(`${__dirname}/../htmlTemplate/doNotChangeIt.html`, null, function(error, data) {
+fs.readFile(`${__dirname}/../template/doNotChangeIt.html`, null, function(error, data) {
     if(error){
-        console.log('读取index.html文件出错了'+error)
+        console.log('读取doNotChangeIt.html文件出错了'+error)
     }else {
         htmlTemplet=data.toString()
+        // console.log('成功读取index.html'+htmlTemplet)
+
+
+    }
+
+})
+
+fs.readFile(`${__dirname}/../template/doNotChangeIt.css`, null, function(error, data) {
+    if(error){
+        console.log('读取doNotChangeIt.css文件出错了'+error)
+    }else {
+        cssTemplet=data.toString()
+        // console.log('成功读取index.html'+htmlTemplet)
+
+
+    }
+
+})
+fs.readFile(`${__dirname}/../template/doNotChangeIt.js`, null, function(error, data) {
+    if(error){
+        console.log('读取doNotChangeIt.js文件出错了'+error)
+    }else {
+        jsTemplet=data.toString()
         // console.log('成功读取index.html'+htmlTemplet)
 
 
@@ -80,7 +105,7 @@ fs.readFile(`${__dirname}/../htmlTemplate/doNotChangeIt.html`, null, function(er
 //     "kids": [{"name": "Jimmy", "age": "12"}, {"name": "Sally", "age": "4"}]
 // };
 //
-// var result = HandlebarsComp(data);
+// var result = htmlHandlebarsComp(data);
 
 
 
@@ -96,11 +121,11 @@ let question = [
         }
     },
     {
-        name: "htmlName",
+        name: "fileName",
         type: 'input',
-        message: "请输入html文件名",
+        message: "请输入html/css/js的文件名",
         validate (val) {
-            if (val === '') return 'html文件名为必填项!'
+            if (val === '') return 'html/css/js文件名为必填项!'
             return true
         }
     },
@@ -147,11 +172,11 @@ let question = [
 inquirer
     .prompt(question).then(answers => {
     // answers 就是用户输入的内容，是个对象
-    let {projectName,htmlName,title,apikey,isInjectJQ } = answers;
+    let {projectName,fileName,title,apikey,isInjectJQ } = answers;
 
-var HandlebarsComp = Handlebars.compile(htmlTemplet);
+var htmlHandlebarsComp = Handlebars.compile(htmlTemplet);
 
-var htmlResult = HandlebarsComp(answers);
+var htmlResult = htmlHandlebarsComp(answers);
 
 // console.log('answers====',answers)
 // console.log('htmlTemplet====',htmlTemplet)
@@ -167,16 +192,41 @@ var htmlResult = HandlebarsComp(answers);
 // console.log('\n')
 // })
 
-fs.writeFile(`${__dirname}/../workspace/${htmlName}.html`, htmlResult, 'utf8', err => {
+// 生成html文件
+fs.writeFile(`${__dirname}/../workspace/${fileName}.html`, htmlResult, 'utf8', err => {
     if (err) console.log(err)
 console.log('\n')
-console.log(chalk.green(`已在workspace下新建了${htmlName}文件,在控制台执行'gulp'即可启动项目(前提是新建了index.html文件)\n`))
+console.log(chalk.green(`在workspace下成功新建了${fileName}.html文件)\n`))
 // console.log(chalk.grey('请不要移动项目文件哦\n'))
 // console.log('htmlResult')
 // console.log('\n')
 })
+
+// 生成css文件
+
+fs.writeFile(`${__dirname}/../workspace/css/${fileName}.css`,cssTemplet , 'utf8', err => {
+    if (err) console.log(err)
+console.log('\n')
+console.log(chalk.green(`在workspace/css下成功新建了${fileName}.css文件\n`))
+// console.log(chalk.grey('请不要移动项目文件哦\n'))
+// console.log('htmlResult')
+// console.log('\n')
+})
+
+
+// 生成js文件
+
+fs.writeFile(`${__dirname}/../workspace/js/${fileName}.js`,jsTemplet , 'utf8', err => {
+    if (err) console.log(err)
+console.log('\n')
+console.log(chalk.green(`在workspace/js下成功新建了${fileName}.js文件\n`))
+// console.log(chalk.grey('请不要移动项目文件哦\n'))
+// console.log('htmlResult')
+// console.log('\n')
+})
+
 // // 写入文件
-// var  writerStream = fs.createWriteStream(`${htmlName}.html`);
+// var  writerStream = fs.createWriteStream(`${fileName}.html`);
 // writerStream.write(htmlResult.toString(), 'UTF8');
 // writerStream.end();
 
