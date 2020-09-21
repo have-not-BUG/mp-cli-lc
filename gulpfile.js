@@ -358,7 +358,7 @@ gulp.task('default', function() {
             baseDir: workSpaceDir
         },
         open:'external',
-        files:[workSpaceDir+'/*.html',workSpaceDir+'/css/*.css'],
+        files:[workSpaceDir+'/*.html',workSpaceDir+'/css/*.css',workSpaceDir+'/js/*.js'],
         ghostMode: false // 禁止 点击，滚动和表单在任何设备上输入将被镜像到所有设备里
     });
 });

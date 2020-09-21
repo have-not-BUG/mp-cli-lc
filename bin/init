@@ -47,56 +47,7 @@ fs.readFile(`${__dirname}/../template/doNotChangeIt.js`, null, function(error, d
 
 })
 
-// const htmlTemplet = JSON.stringify(require(`${__dirname}/../workspace/index.html`))
-// console.log('htmlTemplet===',htmlTemplet)
-// const htmlTemplet = "<!DOCTYPE html>\n" +
-//     "<html lang=\"zh-CN\">\n" +
-//     "<head>\n" +
-//     "    <meta charset=\"UTF-8\">\n" +
-//     "    <meta content=\"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no\"\n" +
-//     "          name=\"viewport\">\n" +
-//     "    <title>多页面模版</title>\n" +
-//     "     <!--第一步、强烈建议在此处尽早引入fundebug。 注意! 记得填入自己的apikey  -->\n" +
-//     "    <script src=\"https://js.fundebug.cn/fundebug.2.0.0.min.js\" crossorigin=\"anonymous\"></script>\n" +
-//     "    <script>\n" +
-//     "        // fundebug初始化 记得填入自己的apikey\n" +
-//     "        if (\"fundebug\" in window) {\n" +
-//     "            fundebug.init({\n" +
-//     "                apikey: '{{apikey}}',\n" +
-//     "                // silentDev: true, // 开发环境不启用fundebug\n" +
-//     "                silentConsole: true,\n" +
-//     "                setHttpBody: true\n" +
-//     "            });\n" +
-//     "        }\n" +
-//     "    </script>\n" +
-//     "     <!--第二步、引入资源及api异常监控插件(也是尽早引入)-->\n" +
-//     "    <script src=\"https://h5.4417.com/ios/js/notchange/monitorFileApiError.js?name={{projectName}}&allWrapId=allWrap\"\n" +
-//     "            data-attr=\"monitor-file-api-error\"></script>\n" +
-//     "    <!--说明\n" +
-//     "    1、data-attr=\"monitor-file-api-error\" 记得加上，请勿修改或遗漏 --必填\n" +
-//     "    2、name表示你的项目名称，记得改 --必填\n" +
-//     "    3、allWrapId表示如果接口异常（网络错误）或资源加载失败时，你想在html上的id为allWrap的原生元素上 innerText 相应的文字 --非必填   -->\n" +
-//     "\n" +
-//     "    <!--第三步、引入反馈网页问题样式-->\n" +
-//     "    <link rel=\"stylesheet\" href=\"https://h5.4417.com/ios/css/reprot-response-width-0e08055edc.css\">\n" +
-//     "\n" +
-//     "\n" +
-//     "</head>\n" +
-//     "<body>\n" +
-//     "<div id=\"allWrap\">多页面模版\n" +
-//     "</div>\n" +
-//     "</body>\n" +
-//     "<script src=\"js/notchange/jQuery.v1.12.4.js\"></script>\n" +
-//     " <!--第四步、引入反馈网页问题js-->\n" +
-//     "<script src=\"https://h5.4417.com/ios/js/notchange/reportself.js?name={{projectName}}&notStorageKeys=storage1,storage1\"  data-attr=\"licai-reportself\"></script>\n" +
-//     "<!--说明\n" +
-//     "1、data-attr=\"licai-reportself\" 记得加上，请勿修改或遗漏 --必填\n" +
-//     "2、name表示你的项目名称，记得改 --必填\n" +
-//     "3、notStorageKeys表示你不想传递给后台的localStorage及sessionStorage的key值，支持多个，中间用英文, 分隔 --非必填   -->\n" +
-//     "\n" +
-//     "\n" +
-//     "\n" +
-//     "</html>\n"
+
 
 
 
