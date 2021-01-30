@@ -1,11 +1,12 @@
 {
-  "name": "lc-mp-cli",
-  "version": "1.0.0",
+  "name": "mp-cli-lc",
+  "version": "0.0.3",
+  "private": false,
   "main": "bin/init",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "node bin/init",
-    "dev":"gulp"
+    "dev": "gulp"
   },
   "repository": {
     "type": "git",

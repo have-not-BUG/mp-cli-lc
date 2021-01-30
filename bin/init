@@ -65,7 +65,7 @@ let question = [
     {
         name: "projectName",
         type: 'input',
-        message: "请输入项目名称",
+        message: "请输入项目名称(便于错误监控后台查看)",
         validate (val) {
             if (val === '') return '项目名称为必填项!'
             return true
