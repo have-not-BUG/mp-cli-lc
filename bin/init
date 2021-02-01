@@ -7,11 +7,17 @@ const inquirer = require('inquirer')
 const chalk = require('chalk')
 // node 内置文件模块
 const fs = require('fs')
+const { resolve } = require('path')
+const path = require('path')
 // 读取根目录下的 template.json
 var htmlTemplet='';
 var cssTemplet='';
 var jsTemplet='';
+// console.log('resolve',resolve('./'))
+// console.log('cwd       : ' + process.cwd())
+// console.log('__dirname : ' + __dirname)
 
+// 读取文件操作
 fs.readFile(`${__dirname}/../template/doNotChangeIt.html`, null, function(error, data) {
     if(error){
         console.log('读取doNotChangeIt.html文件出错了'+error)
@@ -20,16 +26,22 @@ fs.readFile(`${__dirname}/../template/doNotChangeIt.html`, null, function(error,
         // console.log('成功读取index.html'+htmlTemplet)
 
 
+
     }
 
 })
 
 fs.readFile(`${__dirname}/../template/doNotChangeIt.css`, null, function(error, data) {
+    console.log('读取doNotChangeIt.css __dirname:'+__dirname)
+
+
     if(error){
         console.log('读取doNotChangeIt.css文件出错了'+error)
     }else {
         cssTemplet=data.toString()
         // console.log('成功读取index.html'+htmlTemplet)
+        console.log('读取doNotChangeIt.css==cssTemplet:'+cssTemplet)
+
 
 
     }
@@ -47,6 +59,85 @@ fs.readFile(`${__dirname}/../template/doNotChangeIt.js`, null, function(error, d
 
 })
 
+// 拷贝文件
+
+// function copyFile(src, dist) {
+//     fs.writeFileSync(dist, fs.readFileSync(src));
+// }
+function copyFile(src, dist) {
+    fs.createReadStream(src).pipe(fs.createWriteStream(dist));
+}
+
+// 检测目录并创建目录
+// checkDirAndMkDir=(folderpath)=>{
+//     const pathArr=folderpath.split('/');
+//     let _path='';
+//     for(let i=0;i<pathArr.length;i++){
+//         if(pathArr[i]){
+//             _path +=`/${pathArr[i]}`;
+//             if (!fs.existsSync(_path)) {
+//                 fs.mkdirSync(_path);
+//             }
+//         }
+//     }
+// }
+
+
+/**
+ * 读取路径信息
+ * @param {string} path 路径
+ */
+function getStat(path){
+    return new Promise((resolve, reject) => {
+        fs.stat(path, (err, stats) => {
+            if(err){
+                resolve(false);
+            }else{
+                resolve(stats);
+            }
+        })
+    })
+}
+
+/**
+ * 创建路径
+ * @param {string} dir 路径
+ */
+function mkdir(dir){
+    return new Promise((resolve, reject) => {
+        fs.mkdir(dir, err => {
+            if(err){
+                resolve(false);
+            }else{
+                resolve(true);
+            }
+        })
+    })
+}
+
+/**
+ * 路径是否存在，不存在则创建
+ * @param {string} dir 路径
+ */
+async function dirExists(dir){
+    let isExists = await getStat(dir);
+    //如果该路径且不是文件，返回true
+    if(isExists && isExists.isDirectory()){
+        return true;
+    }else if(isExists){     //如果该路径存在但是文件，返回false
+        return false;
+    }
+    //如果该路径不存在
+    let tempDir = path.parse(dir).dir;      //拿到上级路径
+    //递归判断，如果上级目录也不存在，则会代码会在此处继续循环执行，直到目录存在
+    let status = await dirExists(tempDir);
+    let mkdirStatus;
+    if(status){
+        mkdirStatus = await mkdir(dir);
+    }
+    return mkdirStatus;
+}
+
 
 
 
@@ -57,6 +148,8 @@ fs.readFile(`${__dirname}/../template/doNotChangeIt.js`, null, function(error, d
 // };
 //
 // var result = htmlHandlebarsComp(data);
+
+
 
 
 
@@ -143,38 +236,89 @@ var htmlResult = htmlHandlebarsComp(answers);
 // console.log('\n')
 // })
 
+    async function creatHTMLCssJs(){
+
+
+
 // 生成html文件
-fs.writeFile(`${__dirname}/../workspace/${fileName}.html`, htmlResult, 'utf8', err => {
-    if (err) console.log(err)
-console.log('\n')
-console.log(chalk.green(`在workspace下成功新建了${fileName}.html文件)\n`))
+    async function creatHtml(){
+        await dirExists(`${resolve('./')}/workspace`);
+        fs.writeFile(`${resolve('./')}/workspace/${fileName}.html`, htmlResult, 'utf8', err => {
+            if (err) console.log(err)
+            console.log('\n')
+            console.log(chalk.green(`在workspace下成功新建了${fileName}.html文件\n`))
 // console.log(chalk.grey('请不要移动项目文件哦\n'))
-// console.log('htmlResult')
+
 // console.log('\n')
-})
+        })
+
+    }
+    await creatHtml()
+
 
 // 生成css文件
+    async function creatCss(){
+        await dirExists(`${resolve('./')}/workspace/css`);
+        fs.writeFile(`${resolve('./')}/workspace/css/${fileName}.css`,cssTemplet , 'utf8', err => {
+            if (err) console.log(err)
+            console.log('\n')
+            console.log(chalk.green(`在当前workspace/css下成功新建了${fileName}.css文件\n`))
+            console.log('写入cssTemplet中的__dirname',__dirname)
 
-fs.writeFile(`${__dirname}/../workspace/css/${fileName}.css`,cssTemplet , 'utf8', err => {
-    if (err) console.log(err)
-console.log('\n')
-console.log(chalk.green(`在workspace/css下成功新建了${fileName}.css文件\n`))
+            console.log('写入cssTemplet',cssTemplet)
 // console.log(chalk.grey('请不要移动项目文件哦\n'))
 // console.log('htmlResult')
 // console.log('\n')
-})
+        })
+
+    }
+        await creatCss()
+
+
 
 
 // 生成js文件
-
-fs.writeFile(`${__dirname}/../workspace/js/${fileName}.js`,jsTemplet , 'utf8', err => {
-    if (err) console.log(err)
-console.log('\n')
-console.log(chalk.green(`在workspace/js下成功新建了${fileName}.js文件\n`))
+    async function creatJS(){
+        await dirExists(`${resolve('./')}/workspace/js`);
+        fs.writeFile(`${resolve('./')}/workspace/js/${fileName}.js`,jsTemplet , 'utf8', err => {
+            if (err) console.log(err)
+            console.log('\n')
+            console.log(chalk.green(`在workspace/js下成功新建了${fileName}.js文件\n`))
 // console.log(chalk.grey('请不要移动项目文件哦\n'))
 // console.log('htmlResult')
 // console.log('\n')
-})
+        })
+    }
+        await  creatJS()
+        async function copyJQFile(){
+            await dirExists(`${resolve('./')}/workspace/js/notchange/`);
+            copyFile(`${__dirname}/../template/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`)
+
+
+        }
+        copyJQFile()
+
+        async function copyGulpFile(){
+            // copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
+            // 检查文件是否存在于当前目录中。
+            fs.access(`${resolve('./')}/gulpfile.js`, fs.constants.F_OK, (err) => {
+                console.log('拷贝gulp出错了:',err)
+              if(err.code==='ENOENT'){
+                  copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
+              }
+            });
+
+        }
+        copyGulpFile()
+
+
+
+    }
+
+    creatHTMLCssJs()
+
+
+
 
 // // 写入文件
 // var  writerStream = fs.createWriteStream(`${fileName}.html`);

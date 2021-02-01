@@ -83,14 +83,14 @@ var distDir='./workspace/dist';
 
 gulp.task('cssREM', function () {
     var processors = [px2rem({remUnit: 90.4})];
-  var stream = gulp.src(workSpaceDir+'/css/*.css')
+    var stream = gulp.src(workSpaceDir+'/css/*.css')
         .pipe(postcss(processors))
         .on('error', function (err) {
-        console.error(' css rem处理出错了'+err)
-      }).pipe(gulp.dest(workSpaceDir+'/css/rem'));
-  console.log(' css rem在执行中 stream ' + stream)
+            console.error(' css rem处理出错了'+err)
+        }).pipe(gulp.dest(workSpaceDir+'/css/rem'));
+    console.log(' css rem在执行中 stream ' + stream)
 
-  return stream;
+    return stream;
 });
 gulp.task('fileinclude', function () {
     // 适配page中所有文件夹下的所有html，排除page下的include文件夹中html
@@ -373,39 +373,39 @@ gulp.task('default', function() {
 gulp.task('sourcemapBabelHashJs', function () {
     console.log('开始压缩js');
     // uglify 暂时不加
-   return  gulp.src(workSpaceDir+'/js/*.js')
-       .pipe(sourcemaps.init())
-       .on('error', function (err) {
-           console.error('sourcemaps相关程序出错了'+err)
-       })
-       .pipe(babel({
-           presets: ['@babel/env']
-           // ,plugins: ['@babel/transform-runtime'] // 如果启用这个 则会在js中 采用require语法引用的方式 因此不适合
-           // 另外 babel-runtime 可以部分取代babel-polyfill功能 但是像 [1,2,3].includes(1)实例方法 则不可替代
-       }))
-       .on('error', function (err) {
-           console.error('babel({\n' +
-               '            presets: [\'@babel/env\']\n' +
-               '        })出错了'+err)
-       })
-       .pipe(sourcemaps.write('.'))
-       .on('error', function (err) {
-           console.error('sourcemaps.write出错了'+err)
-       })
-       .pipe(rev())
-       .on('error', function (err) {
-           console.error(' js加hash值出错了 pipe(rev())'+err)
-       })
-       .pipe(gulp.dest(distDir+'/js'))
-       .pipe(rev.manifest())
-       .on('error', function (err) {
-           console.error(' rev.manifest出错了'+err)
-       })
-       // .pipe(uglify())
-       // .on('error', function (err) {
-       //     console.error(' js 压缩混淆出错了 pipe(uglify())'+err)
-       // })
-       .pipe(gulp.dest(distDir+'/js'));
+    return  gulp.src(workSpaceDir+'/js/*.js')
+        .pipe(sourcemaps.init())
+        .on('error', function (err) {
+            console.error('sourcemaps相关程序出错了'+err)
+        })
+        .pipe(babel({
+            presets: ['@babel/env']
+            // ,plugins: ['@babel/transform-runtime'] // 如果启用这个 则会在js中 采用require语法引用的方式 因此不适合
+            // 另外 babel-runtime 可以部分取代babel-polyfill功能 但是像 [1,2,3].includes(1)实例方法 则不可替代
+        }))
+        .on('error', function (err) {
+            console.error('babel({\n' +
+                '            presets: [\'@babel/env\']\n' +
+                '        })出错了'+err)
+        })
+        .pipe(sourcemaps.write('.'))
+        .on('error', function (err) {
+            console.error('sourcemaps.write出错了'+err)
+        })
+        .pipe(rev())
+        .on('error', function (err) {
+            console.error(' js加hash值出错了 pipe(rev())'+err)
+        })
+        .pipe(gulp.dest(distDir+'/js'))
+        .pipe(rev.manifest())
+        .on('error', function (err) {
+            console.error(' rev.manifest出错了'+err)
+        })
+        // .pipe(uglify())
+        // .on('error', function (err) {
+        //     console.error(' js 压缩混淆出错了 pipe(uglify())'+err)
+        // })
+        .pipe(gulp.dest(distDir+'/js'));
 
 
     // pump([
@@ -424,44 +424,44 @@ gulp.task('sourcemapBabelHashJs', function () {
 gulp.task('sourcemapBabelHashJsThenUglifyJs', ['sourcemapBabelHashJs'], function () {
     console.log('开始执行js压缩，不过执行前 要先执行sourcemapBabelHashJs')
     return gulp.src(distDir+"/js/*.js")
-    .pipe(uglify())
-    .on('error', function (err) {
-        console.error(' js 压缩混淆出错了 pipe(uglify())'+err)
-    })
+        .pipe(uglify())
+        .on('error', function (err) {
+            console.error(' js 压缩混淆出错了 pipe(uglify())'+err)
+        })
         .pipe(gulp.dest(distDir+'/js/'));
 
 })
 
 gulp.task('remThenJrAndHashCss', ['cssREM'], function () {
 
-  console.log('开始执行css兼容程序')
-  // https://www.gulpjs.com.cn/docs/api/#gulp.task
-  // cssjr 是css 任务的依赖 因此它要通知css它什么时候执行完了
-  // 有三种方式 通知它执行完了 1、回调 2、返回数据流stream  3、返回promise
-  var stream = gulp.src(workSpaceDir+'/css/rem/*.css')
-    .pipe(autoprefixer({
-      browsers: ['since 2010'],
-      cascade: false
-    }))
-    .on('error', function (err) {
-      console.error(' css兼容处理出错了 autoprefixer'+err)
-    })
-    .pipe(rev())
-    .on('error', function (err) {
-      console.error(' css hash处理出错了 .pipe(rev())'+err)
-    })
-    .pipe(gulp.dest(distDir+'/css/jianrong'))
-    .pipe(rev.manifest())
-    .on('error', function (err) {
-      console.error(' css hash manifest.json处理出错了 rev.manifest'+err)
-    })
+    console.log('开始执行css兼容程序')
+    // https://www.gulpjs.com.cn/docs/api/#gulp.task
+    // cssjr 是css 任务的依赖 因此它要通知css它什么时候执行完了
+    // 有三种方式 通知它执行完了 1、回调 2、返回数据流stream  3、返回promise
+    var stream = gulp.src(workSpaceDir+'/css/rem/*.css')
+        .pipe(autoprefixer({
+            browsers: ['since 2010'],
+            cascade: false
+        }))
+        .on('error', function (err) {
+            console.error(' css兼容处理出错了 autoprefixer'+err)
+        })
+        .pipe(rev())
+        .on('error', function (err) {
+            console.error(' css hash处理出错了 .pipe(rev())'+err)
+        })
+        .pipe(gulp.dest(distDir+'/css/jianrong'))
+        .pipe(rev.manifest())
+        .on('error', function (err) {
+            console.error(' css hash manifest.json处理出错了 rev.manifest'+err)
+        })
 
-    // .pipe(rename({
-    //     suffix: ".jr"
-    // }))
-    .pipe(gulp.dest(distDir+'/css/'));
-  console.log(' css兼容程序在执行中 stream ' + stream)
-  return stream;
+        // .pipe(rename({
+        //     suffix: ".jr"
+        // }))
+        .pipe(gulp.dest(distDir+'/css/'));
+    console.log(' css兼容程序在执行中 stream ' + stream)
+    return stream;
 
 })
 
@@ -569,17 +569,17 @@ gulp.task('injectJS',['copyNotchangeJsAndBabelPolyfill'], function () {
 
     // 1、注入所有js最前面 2、src不需要es6/dist todo
     return  gulp.src(distDir+'/*.html')
-         // .pipe(file('es6/dist/index.html', '<html><head></head></html>'))
-         //    .on('error', function (err) {
-         //       console.error('injectJS相关程序出错了--file(distDir+\'/index.html\''+err)
-         //    })
-         .pipe(inject(gulp.src([distDir+'/js/notchange/polyfill.min.js']), {
+        // .pipe(file('es6/dist/index.html', '<html><head></head></html>'))
+        //    .on('error', function (err) {
+        //       console.error('injectJS相关程序出错了--file(distDir+\'/index.html\''+err)
+        //    })
+        .pipe(inject(gulp.src([distDir+'/js/notchange/polyfill.min.js']), {
             starttag: '<head>',
             endtag: '<meta',
-             relative: true
+            relative: true
         })).on('error', function (err) {
-                    console.error('injectJS相关程序出错了--pipe(inject(gulp.src([distDir'+err)
-                 })
+            console.error('injectJS相关程序出错了--pipe(inject(gulp.src([distDir'+err)
+        })
         .pipe(gulp.dest(distDir));
 });
 
@@ -665,30 +665,30 @@ gulp.task('build', ['cleanHTMLCssJsImg'],function (done) {
 });
 // 不压缩图片 注入Polyfill
 gulp.task('buildES', ['cleanHTMLCssJsImg'],function (done) {
-  condition = false;
-  runSequence(
-    // ['assetRev'],
-    ['sourcemapBabelHashJsThenUglifyJs'],
-    ['jrAndHashCssThenCompressionCss'],
-    ['compressionHtmlThenHashHtml'],
-    ['copyNotchangeImg'],
-    ['injectJS'],
-    ['showDistAllFile'],
-    done);
+    condition = false;
+    runSequence(
+        // ['assetRev'],
+        ['sourcemapBabelHashJsThenUglifyJs'],
+        ['jrAndHashCssThenCompressionCss'],
+        ['compressionHtmlThenHashHtml'],
+        ['copyNotchangeImg'],
+        ['injectJS'],
+        ['showDistAllFile'],
+        done);
 });
 
 // 不压缩图片 不注入Polyfill 不打开browser-sync  jenkins专用
 
 gulp.task('buildJK', ['cleanHTMLCssJsImg'],function (done) {
-  condition = false;
-  runSequence(
-    // ['assetRev'],
-    ['sourcemapBabelHashJsThenUglifyJs'],
-    ['jrAndHashCssThenCompressionCss'],
-    ['compressionHtmlThenHashHtml'],
-    ['copyNotchangeImg'],
-    ['copyNotchangeJsAndBabelPolyfill'],
-    done);
+    condition = false;
+    runSequence(
+        // ['assetRev'],
+        ['sourcemapBabelHashJsThenUglifyJs'],
+        ['jrAndHashCssThenCompressionCss'],
+        ['compressionHtmlThenHashHtml'],
+        ['copyNotchangeImg'],
+        ['copyNotchangeJsAndBabelPolyfill'],
+        done);
 });
 
 // 完成一系列流程
@@ -709,30 +709,30 @@ gulp.task('build0', ['cleanHTMLCssJsImg'],function (done) {
 
 // rem适配方案 不压缩图片 不注入Polyfill
 gulp.task('buildrem', ['cleanHTMLCssJsImg'],function (done) {
-  condition = false;
-  runSequence(
-    // ['assetRev'],
-    ['sourcemapBabelHashJsThenUglifyJs'],
-    ['jrAndHashCssThenCompressionCssREM'],
-    ['compressionHtmlThenHashHtml'],
-    ['copyNotchangeImg'],
-    ['copyNotchangeJsAndBabelPolyfill'],
-    ['showDistAllFile'],
-    done);
+    condition = false;
+    runSequence(
+        // ['assetRev'],
+        ['sourcemapBabelHashJsThenUglifyJs'],
+        ['jrAndHashCssThenCompressionCssREM'],
+        ['compressionHtmlThenHashHtml'],
+        ['copyNotchangeImg'],
+        ['copyNotchangeJsAndBabelPolyfill'],
+        ['showDistAllFile'],
+        done);
 });
 
 // rem适配方案 不压缩图片 不注入Polyfill 不打开browser-sync  jenkins专用
 
 gulp.task('buildremJK', ['cleanHTMLCssJsImg'],function (done) {
-  condition = false;
-  runSequence(
-    // ['assetRev'],
-    ['sourcemapBabelHashJsThenUglifyJs'],
-    ['jrAndHashCssThenCompressionCssREM'],
-    ['compressionHtmlThenHashHtml'],
-    ['copyNotchangeImg'],
-    ['copyNotchangeJsAndBabelPolyfill'],
-    done);
+    condition = false;
+    runSequence(
+        // ['assetRev'],
+        ['sourcemapBabelHashJsThenUglifyJs'],
+        ['jrAndHashCssThenCompressionCssREM'],
+        ['compressionHtmlThenHashHtml'],
+        ['copyNotchangeImg'],
+        ['copyNotchangeJsAndBabelPolyfill'],
+        done);
 });
 
 // // 压缩所有图片
@@ -743,41 +743,3 @@ gulp.task('buildremJK', ['cleanHTMLCssJsImg'],function (done) {
 //             .pipe(gulp.dest(distDir+'/img'))
 //     }
 // );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
