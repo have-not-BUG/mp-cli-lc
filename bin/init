@@ -170,9 +170,10 @@ let question = [
     {
         name: "projectName",
         type: 'input',
-        message: "请输入项目名称(便于错误监控后台查看)",
+        message: "请输入项目名称(要求英文)，方便错误监控识别",
         validate (val) {
             if (val === '') return '项目名称为必填项!'
+            if (/\W/.test(val)) return '项目名称要求为英文!'
             return true
         }
     },
@@ -317,6 +318,8 @@ var packagejsonResult = packagejsonHandlebarsComp(answers);
             if (err) console.log(err)
             console.log('\n')
             console.log(chalk.green(`在${resolve('./')}/workspace/js下成功新建了${fileName}.js文件\n`))
+            console.log(chalk.red(`所有文件均在${resolve('./')}下创建完毕，请执行 npm install`))
+
 // console.log(chalk.grey('请不要移动项目文件哦\n'))
 // console.log('htmlResult')
 // console.log('\n')
