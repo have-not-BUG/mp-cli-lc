@@ -1,6 +1,6 @@
 {
   "name": "mp-cli-lc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": false,
   "main": "bin/init",
   "scripts": {
@@ -70,7 +70,8 @@
     "gulp-rev-collector": "~1.2.3",
     "gulp-watch": "~5.0.1",
     "jshint": "~2.9.4",
-    "run-sequence": "~2.2.0"
+    "run-sequence": "~2.2.0",
+    "runjs": "~4.4.2"
   },
   "description": "一个支持创建功能齐全的多页面模版脚手架",
   "bin": {

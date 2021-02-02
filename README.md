@@ -22,7 +22,7 @@ j、文件及接口监控插件支持网速慢提示（仅支持webkit内核）�
 2、进入你自己的工作目录后在控制台运行```init```，按照提示输入 项目名称、HTML/CSS/JS文件名(首次初始化时建议使用`index`名称)、网页title、fundebug的apikey及选择是否引入jQuery；     
 ![生成模板步骤](https://publicimage-1251317493.file.myqcloud.com/reportBug/202007290948571637.png)
 
-3、安装项目所需要的npm包 `npm install`
+~~3、安装项目所需要的npm包~~
 #### （二）、编写代码
 1、执行```npm run dev```或者```gulp``` 启动项目;       
 2、打开workspace文件夹编写对应的html，css及js文件夹下的css、js；  

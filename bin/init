@@ -9,6 +9,7 @@ const chalk = require('chalk')
 const fs = require('fs')
 const { resolve } = require('path')
 const path = require('path')
+const { run } = require('runjs')
 // 读取根目录下的 template.json
 var htmlTemplet='';
 var packagejsonTemplet='';
@@ -318,7 +319,9 @@ var packagejsonResult = packagejsonHandlebarsComp(answers);
             if (err) console.log(err)
             console.log('\n')
             console.log(chalk.green(`在${resolve('./')}/workspace/js下成功新建了${fileName}.js文件\n`))
-            console.log(chalk.red(`所有文件均在${resolve('./')}下创建完毕，请执行 npm install`))
+            console.log(chalk.red(`所有文件均在${resolve('./')}创建完毕，即将安装npm依赖包，安装完后执行gulp启动项目`))
+            run(`npm install`)
+
 
 // console.log(chalk.grey('请不要移动项目文件哦\n'))
 // console.log('htmlResult')
