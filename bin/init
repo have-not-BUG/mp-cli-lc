@@ -319,7 +319,7 @@ var packagejsonResult = packagejsonHandlebarsComp(answers);
             if (err) console.log(err)
             console.log('\n')
             console.log(chalk.green(`在${resolve('./')}/workspace/js下成功新建了${fileName}.js文件\n`))
-            console.log(chalk.red(`所有文件均在${resolve('./')}创建完毕，即将安装npm依赖包，安装完后执行gulp启动项目`))
+            console.log(chalk.blue(`即将安装npm依赖包，安装完后您可执行gulp或npm run dev启动项目`))
             run(`npm install`)
 
 
