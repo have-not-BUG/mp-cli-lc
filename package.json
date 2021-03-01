@@ -1,6 +1,6 @@
 {
   "name": "mp-cli-lc",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "private": false,
   "main": "bin/init",
   "scripts": {
@@ -10,9 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/have-not-BUG/mp-cli-lc.git"
   },
+  "homepage": "https://github.com/have-not-BUG/mp-cli-lc.git",
   "author": "npmname19",
+  "maintainers": ["npmname19"],
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "~7.4.5",
