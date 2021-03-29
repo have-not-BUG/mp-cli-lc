@@ -15,6 +15,16 @@ var htmlTemplet='';
 var packagejsonTemplet='';
 var cssTemplet='';
 var jsTemplet='';
+var isInitOp;
+if(process.argv && !process.argv[2]){
+    console.log('即将进行初始化操作')
+    isInitOp=true;
+
+}else {
+    isInitOp=false;
+    console.log('即将新增页面')
+
+}
 // console.log('resolve',resolve('./'))
 // console.log('cwd       : ' + process.cwd())
 // console.log('__dirname : ' + __dirname)
@@ -32,31 +42,26 @@ fs.readFile(`${__dirname}/../template/doNotChangeIt.html`, null, function(error,
     }
 
 })
-fs.readFile(`${__dirname}/../template/package.json`, function(error, data) {
-    if(error){
-        console.log('读取package.json文件出错了'+error)
-    }else {
-        packagejsonTemplet=data.toString()
+if (isInitOp){
+    fs.readFile(`${__dirname}/../template/package.json`, function(error, data) {
+        if(error){
+            console.log('读取package.json文件出错了'+error)
+        }else {
+            packagejsonTemplet=data.toString()
 
 
 
-    }
+        }
 
-})
-
+    })
+}
 fs.readFile(`${__dirname}/../template/doNotChangeIt.css`, null, function(error, data) {
-    // console.log('读取doNotChangeIt.css __dirname:'+__dirname)
-
-
     if(error){
         console.log('读取doNotChangeIt.css文件出错了'+error)
     }else {
         cssTemplet=data.toString()
         // console.log('成功读取index.html'+htmlTemplet)
         // console.log('读取doNotChangeIt.css==cssTemplet:'+cssTemplet)
-
-
-
     }
 
 })
@@ -79,6 +84,7 @@ fs.readFile(`${__dirname}/../template/doNotChangeIt.js`, null, function(error, d
 // }
 function copyFile(src, dist) {
     fs.createReadStream(src).pipe(fs.createWriteStream(dist));
+    console.log(chalk.green(`从${src}拷贝至${dist}成功。`))
 }
 
 // 检测目录并创建目录
@@ -231,11 +237,11 @@ inquirer.prompt(question).then(answers => {
     // answers 就是用户输入的内容，是个对象
     let {projectName,fileName,title,apikey,isInjectJQ } = answers;
 
-var htmlHandlebarsComp = Handlebars.compile(htmlTemplet);
-var packagejsonHandlebarsComp = Handlebars.compile(packagejsonTemplet);
+    var htmlHandlebarsComp = Handlebars.compile(htmlTemplet);
+    var packagejsonHandlebarsComp = Handlebars.compile(packagejsonTemplet);
 
-var htmlResult = htmlHandlebarsComp(answers);
-var packagejsonResult = packagejsonHandlebarsComp(answers);
+    var htmlResult = htmlHandlebarsComp(answers);
+    var packagejsonResult = packagejsonHandlebarsComp(answers);
 
 // console.log('answers====',answers)
 // console.log('htmlTemplet====',htmlTemplet)
@@ -250,111 +256,121 @@ var packagejsonResult = packagejsonHandlebarsComp(answers);
 // console.log(htmlTemplet)
 // console.log('\n')
 // })
-async function creatHTMLCssJs(){
+    async function creatHTMLCssJs(){
 // 生成html文件
-    async function creatHtml(){
-        await dirExists(`${resolve('./')}/workspace`);
-        fs.writeFile(`${resolve('./')}/workspace/${fileName}.html`, htmlResult, 'utf8', err => {
-            if (err) console.log(err)
-            console.log('\n')
-            console.log(chalk.green(`在${resolve('./')}/workspace下成功新建了${fileName}.html文件\n`))
+        async function creatHtml(){
+            await dirExists(`${resolve('./')}/workspace`);
+            fs.writeFile(`${resolve('./')}/workspace/${fileName}.html`, htmlResult, 'utf8', err => {
+                if (err) console.log(err)
+                console.log('\n')
+                console.log(chalk.green(`在${resolve('./')}/workspace下成功新建了${fileName}.html文件\n`))
 // console.log(chalk.grey('请不要移动项目文件哦\n'))
 
 // console.log('\n')
-        })
+            })
 
-    }
-    await creatHtml()
-
-// 生成package.json文件
-    async function creatPackagejson(){
-            fs.access(`${resolve('./')}/package.json`, fs.constants.F_OK, async (err) => {
-                if(err && err.code==='ENOENT'){
-                    fs.writeFile(`${resolve('./')}/package.json`, packagejsonResult, 'utf8', err => {
-                        if (err) console.log('创建package.json出错了',err)
-                        console.log('\n')
-                        console.log(chalk.green(`在${resolve('./')}下成功新建了package.json文件\n`))
-                    })
-
-                }else if(err){
-                    if (err) console.log('访问package.json出错了',err)
-
-                }
-            });
         }
-    await creatPackagejson()
-// 生成css文件
-    async function creatCss(){
-        await dirExists(`${resolve('./')}/workspace/css`);
-        fs.writeFile(`${resolve('./')}/workspace/css/${fileName}.css`,cssTemplet , 'utf8', err => {
-            if (err) console.log(err)
-            console.log('\n')
-            console.log(chalk.green(`在${resolve('./')}/workspace/css下成功新建了${fileName}.css文件\n`))
-        })
+        await creatHtml()
+        if(isInitOp){
+            // 生成package.json文件
+            async function creatPackagejson(){
+                fs.access(`${resolve('./')}/package.json`, fs.constants.F_OK, async (err) => {
+                    if(err){
+                        if(err.code==='ENOENT'){
+                            fs.writeFile(`${resolve('./')}/package.json`, packagejsonResult, 'utf8', err => {
+                                if (err) console.log('创建package.json出错了',err)
+                                console.log('\n')
+                                console.log(chalk.green(`在${resolve('./')}下成功新建了package.json文件\n`))
+                            })
+                        }else {
+                            console.log('访问package.json出错了',err)
+                        }
 
-    }
-    await creatCss()
-// 生成js文件
-    async function creatJS(){
-        await dirExists(`${resolve('./')}/workspace/js`);
-        fs.writeFile(`${resolve('./')}/workspace/js/${fileName}.js`,jsTemplet , 'utf8', err => {
-            if (err) console.log(err)
-            console.log('\n')
-            console.log(chalk.green(`在${resolve('./')}/workspace/js下成功新建了${fileName}.js文件\n`))
-            console.log(chalk.blue(`即将安装npm依赖包，安装完后您可执行gulp或npm run dev启动项目`))
-            run(`npm install`)
-        })
-    }
-    await  creatJS()
-
-// 具备检测是否存在的拷贝文件功能
-    async function copyFileBeforeCheck(fromFileSrc,toFileSrc,toFileSrcSubDir){
-            fs.access(toFileSrc, fs.constants.F_OK, async (err) => {
-                if(err && err.code==='ENOENT'){
-                    // copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-                    if(toFileSrcSubDir){
-                        await dirExists(toFileSrcSubDir);
                     }
-                    copyFile(fromFileSrc,toFileSrc)
-                }else if (err) {
-                    console.log('拷贝'+fromFileSrc+'出错了:',err)
-                }
-            });
+                });
+            }
+            await creatPackagejson()
         }
-    copyFileBeforeCheck(`${__dirname}/../template/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/`)
-    copyFileBeforeCheck(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-        // copyFileBeforeCheck(`${__dirname}/../template/package.json`,`${resolve('./')}/package.json`)
+// 生成css文件
+        async function creatCss(){
+            await dirExists(`${resolve('./')}/workspace/css`);
+            fs.writeFile(`${resolve('./')}/workspace/css/${fileName}.css`,cssTemplet , 'utf8', err => {
+                if (err) console.log(err)
+                console.log('\n')
+                console.log(chalk.green(`在${resolve('./')}/workspace/css下成功新建了${fileName}.css文件\n`))
+            })
 
-        // async function copyJQFile(){
-        //     fs.access(`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`, fs.constants.F_OK, async (err) => {
-        //         console.log('拷贝jQuery出错了:',err)
-        //         if(err.code==='ENOENT'){
-        //             // copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-        //             await dirExists(`${resolve('./')}/workspace/js/notchange/`);
-        //             copyFile(`${__dirname}/../template/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`)
-        //         }
-        //     });
-        //
-        //
-        //
-        // }
-        // copyJQFile()
+        }
+        await creatCss()
+// 生成js文件
+        async function creatJS(){
+            await dirExists(`${resolve('./')}/workspace/js`);
+            fs.writeFile(`${resolve('./')}/workspace/js/${fileName}.js`,jsTemplet , 'utf8', err => {
+                if (err) console.log(err)
+                console.log('\n')
+                console.log(chalk.green(`在${resolve('./')}/workspace/js下成功新建了${fileName}.js文件\n`))
+                if(isInitOp){
+                    console.log(chalk.blue(`即将安装npm依赖包，安装完后您可执行gulp或npm run dev启动项目`))
+                    run(`npm install`)
+                }
 
-        // async function copyGulpFile(){
-        //     // copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-        //     // 检查文件是否存在于当前目录中。
-        //     fs.access(`${resolve('./')}/gulpfile.js`, fs.constants.F_OK, (err) => {
-        //         // console.log('拷贝gulp出错了:',err)
-        //       if(err.code==='ENOENT'){
-        //           copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-        //       }
-        //     });
-        //
-        // }
-        // copyGulpFile()
+            })
+        }
+        await  creatJS()
+
+        if(isInitOp){
+            // 具备检测是否存在的拷贝文件功能
+            async function copyFileBeforeCheck(fromFileSrc,toFileSrc,toFileSrcSubDir){
+                fs.access(toFileSrc, fs.constants.F_OK, async (err) => {
+                    if(err){
+                        if(err.code==='ENOENT'){
+                            // copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
+                            if(toFileSrcSubDir){
+                                await dirExists(toFileSrcSubDir);
+                            }
+                            copyFile(fromFileSrc,toFileSrc)
+                        }else {
+                            console.log('拷贝'+fromFileSrc+'出错了:',err)
+                        }
+                    }
+                });
+            }
+            copyFileBeforeCheck(`${__dirname}/../template/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/`)
+            copyFileBeforeCheck(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
+            // copyFileBeforeCheck(`${__dirname}/../template/package.json`,`${resolve('./')}/package.json`)
+
+            // async function copyJQFile(){
+            //     fs.access(`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`, fs.constants.F_OK, async (err) => {
+            //         console.log('拷贝jQuery出错了:',err)
+            //         if(err.code==='ENOENT'){
+            //             // copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
+            //             await dirExists(`${resolve('./')}/workspace/js/notchange/`);
+            //             copyFile(`${__dirname}/../template/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`)
+            //         }
+            //     });
+            //
+            //
+            //
+            // }
+            // copyJQFile()
+
+            // async function copyGulpFile(){
+            //     // copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
+            //     // 检查文件是否存在于当前目录中。
+            //     fs.access(`${resolve('./')}/gulpfile.js`, fs.constants.F_OK, (err) => {
+            //         // console.log('拷贝gulp出错了:',err)
+            //       if(err.code==='ENOENT'){
+            //           copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
+            //       }
+            //     });
+            //
+            // }
+            // copyGulpFile()
+        }
+
     }
 
-creatHTMLCssJs()
+    creatHTMLCssJs()
 
 // // 写入文件
 // var  writerStream = fs.createWriteStream(`${fileName}.html`);
@@ -367,3 +383,4 @@ creatHTMLCssJs()
 // 输入项目名称
 // 输入文件名名称
 // 输入网页标题
+

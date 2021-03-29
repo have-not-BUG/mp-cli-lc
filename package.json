@@ -14,7 +14,9 @@
   },
   "homepage": "https://github.com/have-not-BUG/mp-cli-lc.git",
   "author": "npmname19",
-  "maintainers": ["npmname19"],
+  "maintainers": [
+    "npmname19"
+  ],
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "~7.4.5",
@@ -71,7 +73,12 @@
   },
   "description": "一个支持创建功能齐全的多页面模版脚手架",
   "bin": {
-    "init": "bin/init"
+    "init": "bin/init",
+    "mp": "bin/mp",
+    "mp-add": "bin/mp-add",
+    "mp-delete": "bin/mp-delete",
+    "mp-list": "bin/mp-list",
+    "mp-init": "bin/mp-init"
   },
   "keywords": [
     "多页面脚手架",

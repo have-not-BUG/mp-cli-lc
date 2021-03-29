@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+// 修改控制台字符串的样式
+const chalk = require('chalk')
+const { run } = require('runjs')
+const { resolve } = require('path')
+const fs = require('fs')
+
+function checkHasInitAndDoNext() {
+    const gulpfile = `${resolve('./')}/gulpfile.js`;
+    fs.access(gulpfile, fs.constants.F_OK, async (err) => {
+
+        if(err){
+            if(err.code==='ENOENT'){
+                console.log('检测到gulp文件不存在，未执行mp init操作')
+                console.log(chalk.red(`请先运行 mp init`))
+            }else {
+                console.log(chalk.red(`检测gulp文件存不存在时出错了${err}`))
+            }
+        }else {
+            console.log('gulp文件存在，即将运行mp add指令')
+            run(`mp init isAddType`)
+        }
+
+    });
+}
+checkHasInitAndDoNext()
+
+
+
+
+
+
+
+
