@@ -20,7 +20,9 @@ j、文件及接口监控插件支持网速慢提示（仅支持webkit内核）�
 # 二、使用方法
 #### （一）、初始化
 1、Windows系统全局安装(建议以管理员身份)  ```npm install mp-cli-lc -g``` mac ```sudo npm install mp-cli-lc -g```；  
+
 2、进入你自己的工作目录后在控制台运行```mp init```，按照提示输入 项目名称、HTML/CSS/JS文件名(首次初始化时建议使用`index`名称)、网页title、fundebug的apikey及选择是否引入jQuery；
+
 3、`mp init`项目后如果想再创建html/css/js文件，则执行`mp add`即可。     
 ![mp及mp init示例](https://publicimage-1251317493.file.myqcloud.com/reportBug/202103292003151304.png)
 #### （二）、编写代码
