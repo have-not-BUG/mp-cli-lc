@@ -18,17 +18,20 @@ j、文件及接口监控插件支持网速慢提示（仅支持webkit内核）�
 
 
 # 二、使用方法
-#### （一）、初始化
+#### (一)、环境要求
+1、node版本需低于12，因为gulp3与node12不兼容。
+
+#### （二）、初始化
 1、Windows系统全局安装(建议以管理员身份)  ```npm install mp-cli-lc -g``` mac ```sudo npm install mp-cli-lc -g```；  
 
 2、进入你自己的工作目录后在控制台运行```mp init```，按照提示输入 项目名称、HTML/CSS/JS文件名(首次初始化时建议使用`index`名称)、网页title、fundebug的apikey及选择是否引入jQuery；
 
 3、`mp init`项目后如果想再创建html/css/js文件，则执行`mp add`即可。     
 ![mp及mp init示例](https://publicimage-1251317493.file.myqcloud.com/reportBug/202103292003151304.png)
-#### （二）、编写代码
+#### （三）、编写代码
 1、执行```npm run dev```或者```gulp``` 启动项目;       
 2、打开workspace文件夹编写对应的html，css及js文件夹下的css、js；  
-#### （三）、打包
+#### （四）、打包
 完成项目后在控制台执行```gulp build```会打包你的项目至workspace/dist文件夹中并打开浏览器运行你打包后的项目；不同指令，打包的结果不一样:    
 a、gulp build --- 不压缩图片，不注入Polyfill，启动打包后的项目   
 b、gulp buildES --- 不压缩图片，但注入Polyfill，启动打包后的项目      
