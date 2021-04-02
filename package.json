@@ -1,11 +1,11 @@
 {
   "name": "mp-cli-lc",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "private": false,
-  "main": "bin/init",
+  "main": "bin/mp-init",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "init": "node bin/init",
+    "init": "node bin/mp-init",
     "dev": "gulp"
   },
   "repository": {
@@ -73,7 +73,6 @@
   },
   "description": "一个支持创建功能齐全的多页面模版脚手架",
   "bin": {
-    "init": "bin/init",
     "mp": "bin/mp",
     "mp-add": "bin/mp-add",
     "mp-delete": "bin/mp-delete",
