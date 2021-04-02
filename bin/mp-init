@@ -16,9 +16,14 @@ var packagejsonTemplet='';
 var cssTemplet='';
 var jsTemplet='';
 var isInitOp;
+// 没用第二个参数 说明是初始化
 if(process.argv && !process.argv[2]){
-    const gulpfile = `${resolve('./')}/gulpfile.js`;
-    fs.access(gulpfile, fs.constants.F_OK, async (err) => {
+    try {
+        const gulpfile = `${resolve('./')}/gulpfile.js`;
+        fs.accessSync(gulpfile, fs.constants.F_OK);
+        console.log(chalk.red(`您已经mpz init过，无需再init。您是否想mpz add?`))
+        process.exit(1)
+    }catch (err) {
         if(err){
             if(err.code==='ENOENT'){
                 console.log('即将进行初始化操作')
@@ -28,20 +33,15 @@ if(process.argv && !process.argv[2]){
                 console.log(chalk.red(`检测gulp文件存不存在时出错了${err}`))
                 process.exit(1)
             }
-        }else {
-            console.log(chalk.red(`您已经mp init过，无需再init。您是否想mp add?`))
-            process.exit(1)
         }
 
-    });
 
 
-
+    }
 }else {
 
     isInitOp=false;
     console.log('即将新增页面')
-
 }
 // console.log('resolve',resolve('./'))
 // console.log('cwd       : ' + process.cwd())
@@ -359,7 +359,7 @@ inquirer.prompt(question).then(answers => {
                             if(toFileSrcSubDir){
                                 await dirExists(toFileSrcSubDir);
                             }
-                            copyFile(fromFileSrc,toFileSrc)
+                            await copyFile(fromFileSrc,toFileSrc)
                         }else {
                             console.log('拷贝'+fromFileSrc+'出错了:',err)
                         }
