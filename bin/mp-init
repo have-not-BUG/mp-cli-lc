@@ -368,35 +368,7 @@ inquirer.prompt(question).then(answers => {
             }
             await copyFileBeforeCheck(`${__dirname}/../template/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/`)
             await copyFileBeforeCheck(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-            // copyFileBeforeCheck(`${__dirname}/../template/package.json`,`${resolve('./')}/package.json`)
 
-            // async function copyJQFile(){
-            //     fs.access(`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`, fs.constants.F_OK, async (err) => {
-            //         console.log('拷贝jQuery出错了:',err)
-            //         if(err.code==='ENOENT'){
-            //             // copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-            //             await dirExists(`${resolve('./')}/workspace/js/notchange/`);
-            //             copyFile(`${__dirname}/../template/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`)
-            //         }
-            //     });
-            //
-            //
-            //
-            // }
-            // copyJQFile()
-
-            // async function copyGulpFile(){
-            //     // copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-            //     // 检查文件是否存在于当前目录中。
-            //     fs.access(`${resolve('./')}/gulpfile.js`, fs.constants.F_OK, (err) => {
-            //         // console.log('拷贝gulp出错了:',err)
-            //       if(err.code==='ENOENT'){
-            //           copyFile(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-            //       }
-            //     });
-            //
-            // }
-            // copyGulpFile()
         }
 
     }

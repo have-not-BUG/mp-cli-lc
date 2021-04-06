@@ -68,6 +68,7 @@
     "gulp-rev": "~8.1.0",
     "gulp-rev-collector": "~1.2.3",
     "gulp-watch": "~5.0.1",
+    "husky": "~6.0.0",
     "jshint": "~2.9.4",
     "run-sequence": "~2.2.0"
   },
@@ -78,6 +79,11 @@
     "mp-delete": "bin/mp-delete",
     "mp-list": "bin/mp-list",
     "mp-init": "bin/mp-init"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm publish"
+    }
   },
   "keywords": [
     "多页面脚手架",
