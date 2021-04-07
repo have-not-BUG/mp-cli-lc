@@ -21,7 +21,7 @@ if(process.argv && !process.argv[2]){
     try {
         const gulpfile = `${resolve('./')}/gulpfile.js`;
         fs.accessSync(gulpfile, fs.constants.F_OK);
-        console.log(chalk.red(`您已经mpz init过，无需再init。您是否想mpz add?`))
+        console.log(chalk.red(`您已经mp init过，无需再init。您是否想mp add?`))
         process.exit(1)
     }catch (err) {
         if(err){
