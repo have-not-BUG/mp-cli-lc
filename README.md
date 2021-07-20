@@ -1,5 +1,13 @@
-# 多页面模版生成器脚手架
+# 多页面模版生成器脚手架mp-cli-lc
 mp-cli-lc 名字由来mp表示multiple page，多页面的意思，cli表示脚手架的意思，lc这个大家应该懂的
+
+![https://www.npmjs.com/package/mp-cli-lc](https://img.shields.io/npm/v/mp-cli-lc)
+![https://www.npmjs.com/package/mp-cli-lc](https://img.shields.io/npm/dt/mp-cli-lc)
+![https://github.com/have-not-BUG/mp-cli-lc](https://img.shields.io/github/languages/code-size/have-not-BUG/mp-cli-lc)
+![https://github.com/have-not-BUG/mp-cli-lc](https://img.shields.io/github/issues-raw/have-not-BUG/mp-cli-lc)
+![https://github.com/have-not-BUG/mp-cli-lc](https://img.shields.io/github/license/have-not-BUG/mp-cli-lc)
+![https://www.npmjs.com/package/mp-cli-lc](https://img.shields.io/badge/maintained%20with-gulp-cc00ff.svg)
+
 # 一、具备的功能
 ### 支持自定义快速生成多页面，生成的多页面具备以下功能:   
 a、资源加载错误或被删除时自动刷新页面  
@@ -41,4 +49,7 @@ d、gulp build0 --- 压缩图片，注入Polyfill，启动打包后的项目
 # 三、注意事项
 1、请严格按照预设好的项目目录结构编写css、js及html文件，别移动文件位置哦；   
 2、内联在html中的css、js不会进行兼容性优化、压缩及添加hash值；   
-3、确保自己的html文件中`<head>`和`<meta>`相邻，因为插入polyfill.min.js 需要利用这两个标签来定位；   
+3、确保自己的html文件中`<head>`和`<meta>`相邻，因为插入polyfill.min.js 需要利用这两个标签来定位(后续完成babel-transform-runtime功能后可以不用管)；
+
+# 四、待完成事项
+1、支持babel-transform-runtime
