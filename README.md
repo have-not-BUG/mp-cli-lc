@@ -9,25 +9,51 @@ mp-cli-lc 名字由来mp表示multiple page，多页面的意思，cli表示脚�
 ![https://www.npmjs.com/package/mp-cli-lc](https://img.shields.io/badge/maintained%20with-gulp-cc00ff.svg)
 
 # 一、具备的功能
-### 支持自定义快速生成多页面，生成的多页面具备以下功能:   
-a、资源加载错误或被删除时自动刷新页面  
-b、接口网络错误、4xx、5xx和errno不为0时 在页面上进行提示 (alert/tips/html上提示)  
-c、接入了fundebug 错误监控系统  
-d、增加了 用户主动反馈网页问题 功能（用户点击后，可在后台查看用户当时页面地址、浏览器信息、SessionStorage、localStorage等信息），且可以调用自己写的Alert、Confirm、Prompt及Tip方法(因为在webview中这些常用方法均不支持)  
-e、js ES6+语法转换成ES5语法、生成sourceMap/压缩混淆/添加hash值(控制缓存)   
-f、css 添加兼容性前缀/压缩/添加hash值(控制缓存) ；  
-g、html 自动修改内部引用文件hash值/压缩及自动插入polyfill.min.js 功能；  
-h、支持自主选择是否压缩图片功能；  
-i、实时监控文件变化后刷新页面(即支持热更新)
+### （一）生成的多页面具备以下功能:   
+1、资源加载错误或被删除时自动刷新页面
+  
+2、接口网络错误、4xx、5xx和errno不为0时，会自动在页面上进行提示
+ 
+3、接入了fundebug 错误监控系统
+  
+4、增加了 用户主动反馈网页问题 功能（用户点击后，可在fundebug后台查看用户当时页面地址、浏览器信息、SessionStorage、localStorage等信息）
+ 
+5、js ES6+语法转换成ES5语法(内置函数如Promise、静态方法如Array.from及实例方法includes等均支持按需转换兼容)、生成sourceMap/压缩混淆/添加hash值(控制缓存) 
+  
+6、css 添加兼容性前缀/压缩/添加hash值(控制缓存) 
+  
+7、html 自动修改内部引用文件hash值/压缩；
+  
+8、支持自主选择是否压缩图片功能；
+  
+9、实时监控文件变化后刷新页面(即支持热更新、实时更新)
 
-j、文件及接口监控插件支持网速慢提示（仅支持webkit内核），支持断网及重连提示（各常见内核均支持）；  
+10、文件及接口监控插件支持网速慢提示（仅支持webkit内核），支持断网及重连提示（各常见内核均支持）
+
+
+### （二）内置的网页问题反馈插件reportself.js具备以下功能:  
+1、有自定义的alert、confirm、prompt及tips方法(具体用法详见reportself.js内注释) 
+
+2、支持不传递某些localStorage及sessionStorage至fundebug
+
+3、网页问题反馈标志支持左或右放置
+
+
+### （三）内置的资源及api异常监控插件monitorFileApiError.js具备以下功能:  
+1、支持是否监听资源异常或是否监听api接口异常
+
+2、支持是否监听跨域资源异常并刷新页面
+
+3、支持errno不为0时是否进行alert弹窗
+
+
 
 
 
 
 # 二、使用方法
 #### (一)、环境要求
-1、node版本需低于12，因为gulp3与node12不兼容。
+1、**node版本需低于12**，因为gulp3与node12不兼容。
 
 #### （二）、初始化
 1、Windows系统全局安装(建议以管理员身份)  ```npm install mp-cli-lc -g``` mac ```sudo npm install mp-cli-lc -g```；  
@@ -40,16 +66,21 @@ j、文件及接口监控插件支持网速慢提示（仅支持webkit内核）�
 1、执行```npm run dev```或者```gulp``` 启动项目;       
 2、打开workspace文件夹编写对应的html，css及js文件夹下的css、js；  
 #### （四）、打包
-完成项目后在控制台执行```gulp build```会打包你的项目至workspace/dist文件夹中并打开浏览器运行你打包后的项目；不同指令，打包的结果不一样:    
-a、gulp build --- 不压缩图片，不注入Polyfill，启动打包后的项目   
-b、gulp buildES --- 不压缩图片，但注入Polyfill，启动打包后的项目      
-c、gulp buildJK --- 不压缩图片，不注入Polyfill，不启动打包后的项目  【Jenkins上部署时采用】   
-d、gulp build0 --- 压缩图片，注入Polyfill，启动打包后的项目  
+以下适合mp-cli-cl v3+版本，v2及以下强烈建议升级至v3+
+
+完成项目后在控制台执行```npm run build```或者```gulp build```会打包你的项目至workspace/dist文件夹中并打开浏览器运行你打包后的项目；不同指令，打包的结果不一样:    
+a、npm run build 或者 gulp build ---    不压缩图片，启动打包后的项目
+
+b、npm run build:jk 或者 gulp buildJK ---  不压缩图片，不启动打包后的项目  【Jenkins上部署时采用】
+
+c、npm run build:img 或者 gulp buildImg ---    压缩图片，不启动打包后的项目
+
+d、npm run build:imgrun 或者 gulp buildImgRun --- 压缩图片，启动打包后的项目
+
+
 
 # 三、注意事项
 1、请严格按照预设好的项目目录结构编写css、js及html文件，别移动文件位置哦；   
 2、内联在html中的css、js不会进行兼容性优化、压缩及添加hash值；   
-3、确保自己的html文件中`<head>`和`<meta>`相邻，因为插入polyfill.min.js 需要利用这两个标签来定位(后续完成babel-transform-runtime功能后可以不用管)；
 
-# 四、待完成事项
-1、支持babel-transform-runtime
+

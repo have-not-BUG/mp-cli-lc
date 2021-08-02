@@ -1,12 +1,13 @@
 {
   "name": "mp-cli-lc",
-  "version": "2.0.9",
+  "version": "3.0.0",
   "private": false,
   "main": "bin/mp-init",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "node bin/mp-init",
-    "dev": "gulp"
+    "dev": "gulp",
+    "prepublishOnly": "npm version patch"
   },
   "repository": {
     "type": "git",
@@ -82,7 +83,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm version patch && npm publish"
     }
   },
   "keywords": [

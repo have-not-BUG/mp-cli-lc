@@ -3,6 +3,10 @@ var plumber = require('gulp-plumber'); // 实时更新错误不会导致终端gu
 var connect = require('gulp-connect'); // 在本地开启一个websocket服务，使用liveReload实现实时更新
 var watch = require('gulp-watch'); // 监听文件的变化，配合connect实现服务自动刷新
 var gulpOpen = require('gulp-open');//用指定软件打开文件
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var glob = require('glob');
+var eventStream = require('event-stream');
 
 
 var browserSync = require('browser-sync').create();
@@ -367,10 +371,72 @@ gulp.task('default', function() {
 
 // 二、gulp build  依次实现 1、babel语法转换 2、加hash 3、压缩混淆 4、启动build后服务
 
-
-
 // js sourcemap和babel及hash值
-gulp.task('sourcemapBabelHashJs', function () {
+// gulp.task('sourcemapBabelHashJs', function () {
+//     console.log('开始压缩js');
+//     // uglify 暂时不加
+//     return  gulp.src(workSpaceDir+'/js/*.js')
+//         .pipe(sourcemaps.init())
+//         .on('error', function (err) {
+//             console.error('sourcemaps相关程序出错了'+err)
+//         })
+//         .pipe(babel({
+//             presets: ['@babel/preset-env'],
+//             // plugins: ['@babel/transform-runtime'], // 如果启用这个 则会在js中 采用require语法引用的方式 因此不适合
+//             // presets: [['@babel/preset-env',{
+//             //     "useBuiltIns": "usage",
+//             //     "corejs": 3,
+//             //     "debug": true
+//             // }]],
+//             // plugins: [['@babel/plugin-transform-runtime',{
+//             //     "corejs": {
+//             //         "version": 3,
+//             //         "proposals": true
+//             //     },
+//             //     "regenerator": true
+//             // }]],
+//             // 如果启用这个 则会在js中 采用require语法引用的方式 因此不适合
+//             // 另外 babel-runtime 可以部分取代babel-polyfill功能 但是像 [1,2,3].includes(1)实例方法 则不可替代
+//         }))
+//         .on('error', function (err) {
+//             console.error('babel({\n' +
+//                 '            presets: [\'@babel/env\']\n' +
+//                 '        })出错了'+err)
+//         })
+//         .pipe(sourcemaps.write('.'))
+//         .on('error', function (err) {
+//             console.error('sourcemaps.write出错了'+err)
+//         })
+//         .pipe(rev())
+//         .on('error', function (err) {
+//             console.error(' js加hash值出错了 pipe(rev())'+err)
+//         })
+//         .pipe(gulp.dest(distDir+'/js'))
+//         .pipe(rev.manifest())
+//         .on('error', function (err) {
+//             console.error(' rev.manifest出错了'+err)
+//         })
+//         // .pipe(uglify())
+//         // .on('error', function (err) {
+//         //     console.error(' js 压缩混淆出错了 pipe(uglify())'+err)
+//         // })
+//         .pipe(gulp.dest(distDir+'/js'));
+//
+//
+//     // pump([
+//     //         gulp.src(workSpaceDir+'/js/*.js'),
+//     //          sourcemaps.init(),
+//     //         uglify(),
+//     //         // rename({suffix: '.min.'+curDateAndTime}),
+//     //         gulp.dest('./dist/js')
+//     //     ],
+//     //     cb
+//     // );
+// });
+
+
+// js sourcemap和babel+transform-runtime及hash值
+gulp.task('sourcemapBabelRuntimeHashJs', function () {
     console.log('开始压缩js');
     // uglify 暂时不加
     return  gulp.src(workSpaceDir+'/js/*.js')
@@ -379,8 +445,24 @@ gulp.task('sourcemapBabelHashJs', function () {
             console.error('sourcemaps相关程序出错了'+err)
         })
         .pipe(babel({
-            presets: ['@babel/env']
-            // ,plugins: ['@babel/transform-runtime'] // 如果启用这个 则会在js中 采用require语法引用的方式 因此不适合
+            // presets: ['@babel/env'],
+            // plugins: ['@babel/transform-runtime'], // 如果启用这个 则会在js中 采用require语法引用的方式 因此不适合
+            presets: [['@babel/preset-env',{
+                "useBuiltIns": "usage",
+                "corejs": 3,
+                "debug": true
+            }]],
+            plugins: [['@babel/plugin-transform-runtime',{
+                "corejs": {
+                    "version": 3,
+                    "proposals": true
+                },
+                "regenerator": true
+            }]],
+            "ignore": [
+                "node_modules"
+            ]
+            // 如果启用这个 则会在js中 采用require语法引用的方式 因此不适合
             // 另外 babel-runtime 可以部分取代babel-polyfill功能 但是像 [1,2,3].includes(1)实例方法 则不可替代
         }))
         .on('error', function (err) {
@@ -419,10 +501,37 @@ gulp.task('sourcemapBabelHashJs', function () {
     // );
 });
 
+
+// 将babel run time后require的代码引入使其支持浏览器
+gulp.task('browserify', function(done) {
+    glob(distDir+'/js/**.js', function(err, files) {
+        console.log('files',files)
+        if(err) done(err);
+        var tasks = files.map(function(entry) {
+            return browserify({ entries: [entry] })
+                .bundle()
+                .pipe(source(entry))
+                // .pipe(rename({
+                //     extname: '.bundle.js'
+                // }))
+                .pipe(gulp.dest('.'));
+        });
+        eventStream.merge(tasks).on('end', done);
+    })
+});
+
+gulp.task('sourcemapBabelRuntimeHashJsAndBrowserify', ['sourcemapBabelRuntimeHashJs'],function (done) {
+    // condition = false;
+    runSequence(
+        // ['assetRev'],
+        ['browserify'],
+        done);
+});
+
 // js 压缩
-// 其执行的前提是sourcemapBabelHashJs先执行完了
-gulp.task('sourcemapBabelHashJsThenUglifyJs', ['sourcemapBabelHashJs'], function () {
-    console.log('开始执行js压缩，不过执行前 要先执行sourcemapBabelHashJs')
+// 其执行的前提是sourcemapBabelRuntimeHashJs先执行完了
+gulp.task('sourcemapBabelRuntimeHashJsThenUglifyJs', ['sourcemapBabelRuntimeHashJsAndBrowserify'], function () {
+    console.log('开始执行js压缩，不过执行前 要先执行sourcemapBabelRuntimeHashJs')
     return gulp.src(distDir+"/js/*.js")
         .pipe(uglify())
         .on('error', function (err) {
@@ -634,6 +743,8 @@ gulp.task('minImg', ['cleanNotchangeImg'],function(){
 });
 
 
+
+
 // 在dist上启动服务
 gulp.task('showDistAllFile', function() {
     browserSync.init({
@@ -649,13 +760,12 @@ gulp.task('showDistAllFile', function() {
 
 
 // 完成一系列流程
-// 不压缩图片 不注入Polyfill
-
+// 不压缩图片 启动打包后的项目
 gulp.task('build', ['cleanHTMLCssJsImg'],function (done) {
-    condition = false;
+    // condition = false;
     runSequence(
         // ['assetRev'],
-        ['sourcemapBabelHashJsThenUglifyJs'],
+        ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
         ['jrAndHashCssThenCompressionCss'],
         ['compressionHtmlThenHashHtml'],
         ['copyNotchangeImg'],
@@ -663,27 +773,27 @@ gulp.task('build', ['cleanHTMLCssJsImg'],function (done) {
         ['showDistAllFile'],
         done);
 });
-// 不压缩图片 注入Polyfill
-gulp.task('buildES', ['cleanHTMLCssJsImg'],function (done) {
-    condition = false;
-    runSequence(
-        // ['assetRev'],
-        ['sourcemapBabelHashJsThenUglifyJs'],
-        ['jrAndHashCssThenCompressionCss'],
-        ['compressionHtmlThenHashHtml'],
-        ['copyNotchangeImg'],
-        ['injectJS'],
-        ['showDistAllFile'],
-        done);
-});
+// // 不压缩图片 注入Polyfill
+// gulp.task('buildPolyRun', ['cleanHTMLCssJsImg'],function (done) {
+//     // condition = false;
+//     runSequence(
+//         // ['assetRev'],
+//         ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
+//         ['jrAndHashCssThenCompressionCss'],
+//         ['compressionHtmlThenHashHtml'],
+//         ['copyNotchangeImg'],
+//         ['injectJS'],
+//         ['showDistAllFile'],
+//         done);
+// });
 
-// 不压缩图片 不注入Polyfill 不打开browser-sync  jenkins专用
+// 不压缩图片 不启动打包后的项目  jenkins专用
 
 gulp.task('buildJK', ['cleanHTMLCssJsImg'],function (done) {
-    condition = false;
+    // condition = false;
     runSequence(
         // ['assetRev'],
-        ['sourcemapBabelHashJsThenUglifyJs'],
+        ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
         ['jrAndHashCssThenCompressionCss'],
         ['compressionHtmlThenHashHtml'],
         ['copyNotchangeImg'],
@@ -691,49 +801,78 @@ gulp.task('buildJK', ['cleanHTMLCssJsImg'],function (done) {
         done);
 });
 
-// 完成一系列流程
-// 压缩图片 注入Polyfill 打开browser-sync
 
-gulp.task('build0', ['cleanHTMLCssJsImg'],function (done) {
-    condition = false;
+
+// 压缩图片  不启动打包后的项目
+gulp.task('buildImg', ['cleanHTMLCssJsImg'],function (done) {
+    // condition = false;
     runSequence(
         // ['assetRev'],
-        ['sourcemapBabelHashJsThenUglifyJs'],
+        ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
         ['jrAndHashCssThenCompressionCss'],
         ['compressionHtmlThenHashHtml'],
         ['minImg'],
-        ['injectJS'],
-        ['showDistAllFile'],
+        ['copyNotchangeJsAndBabelPolyfill'],
         done);
 });
 
-// rem适配方案 不压缩图片 不注入Polyfill
-gulp.task('buildrem', ['cleanHTMLCssJsImg'],function (done) {
-    condition = false;
+// // 压缩图片  启动打包后的项目
+gulp.task('buildImgRun', ['cleanHTMLCssJsImg'],function (done) {
+    // condition = false;
     runSequence(
         // ['assetRev'],
-        ['sourcemapBabelHashJsThenUglifyJs'],
-        ['jrAndHashCssThenCompressionCssREM'],
+        ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
+        ['jrAndHashCssThenCompressionCss'],
         ['compressionHtmlThenHashHtml'],
-        ['copyNotchangeImg'],
+        ['minImg'],
         ['copyNotchangeJsAndBabelPolyfill'],
         ['showDistAllFile'],
         done);
 });
+
+// // 完成一系列流程
+// // 压缩图片 注入Polyfill 打开browser-sync
+//
+// gulp.task('buildImgPolyRun', ['cleanHTMLCssJsImg'],function (done) {
+//     // condition = false;
+//     runSequence(
+//         // ['assetRev'],
+//         ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
+//         ['jrAndHashCssThenCompressionCss'],
+//         ['compressionHtmlThenHashHtml'],
+//         ['minImg'],
+//         ['injectJS'],
+//         ['showDistAllFile'],
+//         done);
+// });
+
+// // rem适配方案 不压缩图片 不注入Polyfill
+// gulp.task('buildrem', ['cleanHTMLCssJsImg'],function (done) {
+//     // condition = false;
+//     runSequence(
+//         // ['assetRev'],
+//         ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
+//         ['jrAndHashCssThenCompressionCssREM'],
+//         ['compressionHtmlThenHashHtml'],
+//         ['copyNotchangeImg'],
+//         ['copyNotchangeJsAndBabelPolyfill'],
+//         ['showDistAllFile'],
+//         done);
+// });
 
 // rem适配方案 不压缩图片 不注入Polyfill 不打开browser-sync  jenkins专用
 
-gulp.task('buildremJK', ['cleanHTMLCssJsImg'],function (done) {
-    condition = false;
-    runSequence(
-        // ['assetRev'],
-        ['sourcemapBabelHashJsThenUglifyJs'],
-        ['jrAndHashCssThenCompressionCssREM'],
-        ['compressionHtmlThenHashHtml'],
-        ['copyNotchangeImg'],
-        ['copyNotchangeJsAndBabelPolyfill'],
-        done);
-});
+// gulp.task('buildremJK', ['cleanHTMLCssJsImg'],function (done) {
+//     // condition = false;
+//     runSequence(
+//         // ['assetRev'],
+//         ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
+//         ['jrAndHashCssThenCompressionCssREM'],
+//         ['compressionHtmlThenHashHtml'],
+//         ['copyNotchangeImg'],
+//         ['copyNotchangeJsAndBabelPolyfill'],
+//         done);
+// });
 
 // // 压缩所有图片
 // gulp.task('imgMin', function () {

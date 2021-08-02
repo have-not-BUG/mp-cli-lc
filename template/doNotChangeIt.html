@@ -19,16 +19,16 @@
         }
     </script>
      <!--引入资源及api异常监控插件-->
-    <script src="https://h5.4417.com/ios/js/notchange/monitorFileApiError.js?name={{projectName}}&allWrapId=allWrap"
+    <script src="https://h5.4417.com/ios/js/notchange/monitorFileApiError.js?name={{projectName}}&allWrapId=allWrap&errNoNotAlert=true"
             data-attr="monitor-file-api-error"></script>
     <!--说明
     1、data-attr="monitor-file-api-error" 请勿修改或遗漏 --必填
-    2、name表示你的项目名称 --必填
-    3、allWrapId表示如果接口异常（网络错误）或资源加载失败时，你想在html上的id为allWrap的原生元素上 innerText 相应的文字 --非必填
-    4、notMonitorDiffSiteResource 有值时表示 不监听跨域资源异常并刷新页面,默认监听跨域资源异常并刷新页面 --非必填
-    5、notMonitorResource 有值时 表示监听到资源异常时（含同源及跨域资源）也不会刷新页面，默认监听到资源异常时会进行刷新页面 ---非必填
-    6、errNoNotAlert 表示errno 不为0时是否进行alert弹窗，默认弹窗---非必填
-    7、notMonitorApi 有值时表示不监控api接口异常情况，默认监控---非必填
+    2、查询符name表示你的项目名称 --必填
+    3、查询符allWrapId表示如果接口异常（网络错误）或资源加载失败时，你想在html上的id为allWrap的原生元素上 innerText 相应的文字 --非必填
+    4、查询符notMonitorDiffSiteResource 有值时表示 不监听跨域资源异常并刷新页面,默认监听跨域资源异常并刷新页面 --非必填
+    5、查询符notMonitorResource 有值时 表示监听到资源异常时（含同源及跨域资源）也不会刷新页面，默认监听到资源异常时会进行刷新页面 ---非必填
+    6、查询符errNoNotAlert 表示errno 不为0时是否进行alert弹窗，默认不弹窗---非必填
+    7、查询符notMonitorApi 有值时表示不监控api接口异常情况，默认监控---非必填
     -->
 
     <!--引入反馈网页问题样式-->
@@ -52,9 +52,9 @@
 <script src="https://h5.4417.com/ios/js/notchange/reportself.js?name={{projectName}}&apikey={{apikey}}&notStorageKeys=storage1,storage1&right=true"  data-attr="licai-reportself"></script>
 <!--说明
 1、data-attr="licai-reportself" 请勿修改或遗漏 --必填
-2、name表示你的项目名称 --必填
-3、notStorageKeys表示你不想传递给后台的localStorage及sessionStorage的key值，支持多个，中间用英文, 分隔 --非必填
-4、right 有值表示 网页问题反馈标志在右边 否则在左边 -- 非必填
+2、查询符name表示你的项目名称 --必填
+3、查询符notStorageKeys表示你不想传递给后台的localStorage及sessionStorage的key值，支持多个，中间用英文, 分隔 --非必填
+4、查询符right 有值表示 网页问题反馈标志在右边 否则在左边 -- 非必填
 -->
 
 
