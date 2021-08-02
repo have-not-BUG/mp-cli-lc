@@ -66,7 +66,7 @@ mp-cli-lc 名字由来mp表示multiple page，多页面的意思，cli表示脚�
 1、执行```npm run dev```或者```gulp``` 启动项目;       
 2、打开workspace文件夹编写对应的html,css,js及img文件夹(img文件夹默认没有)下的css、js、img(这些文件夹名称不能变动)；  
 #### （四）、打包
-以下适合mp-cli-cl v3+版本，v2及以下强烈建议升级至v3+
+以下适合mp-cli-lc v3+版本，v2及以下强烈建议升级至v3+
 
 完成项目后在控制台执行```npm run build```或者```gulp build```会打包你的项目至workspace/dist文件夹中并打开浏览器运行你打包后的项目；不同指令，打包的结果不一样:    
 a、npm run build 或者 gulp build ---    不压缩图片，启动打包后的项目
