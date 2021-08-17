@@ -83,4 +83,5 @@ d、npm run build:imgrun 或者 gulp buildImgRun --- 压缩图片，启动打包
 1、请严格按照预设好的项目目录结构编写css、js及html文件，别移动文件位置哦；   
 2、内联在html中的css、js不会进行兼容性优化、压缩及添加hash值；   
 
-
+# 四、变更记录 changelog
+[CHANGELOG](CHANGELOG.md)
