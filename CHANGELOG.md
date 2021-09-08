@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.0.5...v3.1.0) (2021-09-08)
+
+
+### Features
+
+* 插件采用jsdelivr的cdn方式 ([04bd8d4](https://github.com/have-not-BUG/mp-cli-lc/commit/04bd8d4329f45817678a709908f98ec33fca1879))
+
 ### [3.0.5](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.0.4...v3.0.5) (2021-08-17)
 
 ## [3.0.4](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.0.3...v3.0.4) (2021-08-13)
