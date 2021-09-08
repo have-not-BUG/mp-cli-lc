@@ -38,6 +38,8 @@ mp-cli-lc 名字由来mp表示multiple page，多页面的意思，cli表示脚�
 
 3、网页问题反馈标志支持左或右放置
 
+以上具体配置请详见页面引用处下方注释
+
 
 ### （三）内置的资源及api异常监控插件monitorFileApiError.js具备以下功能:  
 1、支持是否监听资源异常或是否监听api接口异常
@@ -46,7 +48,7 @@ mp-cli-lc 名字由来mp表示multiple page，多页面的意思，cli表示脚�
 
 3、支持errno不为0时是否进行alert弹窗
 
-
+以上具体配置请详见页面引用处下方注释
 
 
 

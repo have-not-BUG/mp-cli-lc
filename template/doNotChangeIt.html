@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no"
           name="viewport">
+    <link rel="dns-prefetch" href="https://js.fundebug.cn/">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
     <title>{{title}}</title>
      <!--引入fundebug。  -->
     <script src="https://js.fundebug.cn/fundebug.2.0.0.min.js" crossorigin="anonymous"></script>
@@ -19,7 +21,7 @@
         }
     </script>
      <!--引入资源及api异常监控插件-->
-    <script src="https://h5.4417.com/ios/js/notchange/monitorFileApiError.js?name={{projectName}}&allWrapId=allWrap&errNoNotAlert=true"
+    <script src="https://cdn.jsdelivr.net/gh/have-not-BUG/cdn/monitorFileApiError.js?name={{projectName}}&allWrapId=allWrap&errNoNotAlert=true"
             data-attr="monitor-file-api-error"></script>
     <!--说明
     1、data-attr="monitor-file-api-error" 请勿修改或遗漏 --必填
@@ -32,7 +34,7 @@
     -->
 
     <!--引入反馈网页问题样式-->
-    <link rel="stylesheet" href="https://h5.4417.com/ios/css/reprot-response-width-lr-pc-min-24f205d74e.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/have-not-BUG/cdn/reprot-response-width-lr-pc-min-24f205d74e.css">
     <!--在以下的css文件中编写你的css-->
     <link rel="stylesheet" href="./css/{{fileName}}.css">
 
@@ -49,7 +51,7 @@
 <!--在以下的js文件中编写你的js-->
 <script src="./js/{{fileName}}.js"></script>
  <!--引入反馈网页问题js-->
-<script src="https://h5.4417.com/ios/js/notchange/reportself.js?name={{projectName}}&apikey={{apikey}}&notStorageKeys=storage1,storage1&right=true"  data-attr="licai-reportself"></script>
+<script src="https://cdn.jsdelivr.net/gh/have-not-BUG/cdn/reportself.js?name={{projectName}}&apikey={{apikey}}&notStorageKeys=storage1,storage1&right=true"  data-attr="licai-reportself"></script>
 <!--说明
 1、data-attr="licai-reportself" 请勿修改或遗漏 --必填
 2、查询符name表示你的项目名称 --必填
