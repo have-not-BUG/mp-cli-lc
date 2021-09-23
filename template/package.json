@@ -6,7 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "gulp",
     "build": "gulp build",
+    "build:nosm": "gulp build:nosm",
     "build:jk": "gulp buildJK",
+    "build:jknosm": "gulp buildJK:nosm",
     "build:imgrun": "gulp buildImgRun",
     "build:img": "gulp buildImg"
   },
@@ -43,7 +45,9 @@
     "@babel/core": "~7.4.5",
     "@babel/plugin-transform-runtime": "~7.4.4",
     "@babel/preset-env": "~7.4.5",
+    "@babel/preset-react": "~7.14.5",
     "@babel/runtime-corejs3": "~7.14.8",
+    "babelify": "~10.0.0",
     "browserify": "~17.0.0",
     "event-stream": "~4.0.1",
     "glob": "~7.1.7",
@@ -67,10 +71,16 @@
     "gulp-rename": "~1.2.2",
     "gulp-rev": "~8.1.0",
     "gulp-rev-collector": "~1.2.3",
+    "gulp-util": "~3.0.8",
     "gulp-watch": "~5.0.1",
     "jshint": "~2.9.4",
     "run-sequence": "~2.2.0",
-    "vinyl-source-stream": "~2.0.0"
+    "vinyl-buffer": "~1.0.1",
+    "vinyl-source-stream": "~2.0.0",
+    "husky": "~4.2.5"
+  },
+  "husky": {
+    "hooks": {}
   },
   "description": ""
 }

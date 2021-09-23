@@ -1,4 +1,4 @@
-# 多页面模版生成器脚手架mp-cli-lc
+# 功能齐全的多页面模版生成器脚手架mp-cli-lc
 mp-cli-lc 名字由来mp表示multiple page，多页面的意思，cli表示脚手架的意思，lc这个大家应该懂的
 
 ![https://www.npmjs.com/package/mp-cli-lc](https://img.shields.io/npm/v/mp-cli-lc)

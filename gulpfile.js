@@ -19,6 +19,9 @@ var ejs = require('gulp-ejs');
 
 var os = require('os');
 // var path = require('path');
+var buffer=require('vinyl-buffer');
+var babelify=require('babelify');
+var gutil = require('gulp-util');
 
 var ipv4IpLocal = function getLoaclIP() {
     var ipObj = os.networkInterfaces();
@@ -51,7 +54,6 @@ var cleanCSS = require('gulp-clean-css'),//css压缩
     imagemin = require("gulp-imagemin"), //图片压缩
     rename = require("gulp-rename"),//重命名
     clean = require("gulp-clean");//清空文件夹
-var pump = require('pump');
 
 
 var babel = require("gulp-babel");
@@ -369,7 +371,256 @@ gulp.task('default', function() {
 
 
 
-// 二、gulp build  依次实现 1、babel语法转换 2、加hash 3、压缩混淆 4、启动build后服务
+// 二、js相关
+
+// 1、现用方案
+
+// gulp.task('sc', function() {
+//     return gulp.src('./workspace/js/*.js')
+//         .pipe(sourcemaps.init({loadMaps: true}))
+//         .on('error', function (err) {
+//             console.error('sourcemaps相关程序出错了'+err)
+//         })
+//         .pipe(babel({
+//             // presets: ['@babel/env'],
+//             // plugins: ['@babel/transform-runtime'], // 如果启用这个 则会在js中 采用require语法引用的方式 因此不适合
+//             presets: [['@babel/preset-env',{
+//                 "useBuiltIns": "usage",
+//                 "corejs": 3,
+//                 "debug": true
+//             }]],
+//             plugins: [['@babel/plugin-transform-runtime',{
+//                 "corejs": {
+//                     "version": 3,
+//                     "proposals": true
+//                 },
+//                 "regenerator": true
+//             }]],
+//             "ignore": [
+//                 "node_modules"
+//             ]
+//             // 如果启用这个 则会在js中 采用require语法引用的方式 因此不适合
+//             // 另外 babel-runtime 可以部分取代babel-polyfill功能 但是像 [1,2,3].includes(1)实例方法 则不可替代
+//         }))
+//         .on('error', function (err) {
+//             console.error('babel({\n' +
+//                 '            presets: [\'@babel/env\']\n' +
+//                 '        })出错了'+err)
+//         })
+//         // .pipe(uglify())
+//         // .on('error', function (err) {
+//         //     console.error(' js 压缩混淆出错了 pipe(uglify())'+err)
+//         // })
+//         .pipe(sourcemaps.write('./'))
+//         .pipe(gulp.dest('./workspace/sourceDist/'));
+// });
+//
+// gulp.task('all', ['sc'],function (done) {
+//     // condition = false;
+//         runSequence(
+//             // ['assetRev'],
+//             ['browserifyTest'],
+//             done);
+// });
+//
+// gulp.task('browserifyTest', function(done) {
+//     glob('./workspace/sourceDist/**.js', function(err, files) {
+//         console.log('files',files)
+//         console.log('browserifyTest出错了:err ',err)
+//         if(err) done(err);
+//         var tasks = files.map(function(entry) {
+//             return browserify({ entries: [entry] })
+//                 .bundle()
+//                 .pipe(source(entry))
+//                 // .pipe(rename({
+//                 //     extname: '.bundle.js'
+//                 // }))
+//                 .pipe(gulp.dest('.'));
+//         });
+//         eventStream.merge(tasks).on('end', done);
+//     })
+// });
+
+
+// gulp.task('ba', function(){
+//     var   oneFile  = './workspace/js/index.js';
+//     return browserify(oneFile,{debug:true}).transform(babelify,
+//         {
+//             presets: [["@babel/preset-env",{
+//                 "useBuiltIns": "usage",
+//                 "corejs": 3,
+//                 "debug": true
+//             }], "@babel/preset-react"],
+//             // plugins: [['@babel/plugin-transform-runtime',{
+//             //     "corejs": {
+//             //         "version": 3,
+//             //         "proposals": true
+//             //     },
+//             //     "regenerator": true
+//             // }]],
+//             "ignore": [
+//                 "node_modules"
+//             ],
+//             sourceMaps:true
+//         })
+//         .bundle()
+//         .pipe(source('index.js'))
+//         .pipe(buffer())
+//         .pipe(sourcemaps.init({loadMaps: true}))
+//         .pipe(uglify())
+//         .pipe(sourcemaps.write('./'))
+//         .pipe(gulp.dest('./workspace/js/babelify'))
+//         .pipe(gutil.noop())
+// })
+
+// 1.1 A browserify+babel+sourcemap+uglify 处理
+gulp.task('jsBabelSourcemapUglify', function(done){
+    glob(workSpaceDir+'/js/**.js', function(err, files) {
+        console.log('files',files)
+        if(err) done(err);
+        var tasks = files.map(function(entry) {
+            console.log('entry',entry)
+            return browserify(entry,{debug:true}).transform(babelify,
+                {
+                    presets: [["@babel/preset-env",{
+                        "useBuiltIns": "usage",
+                        "corejs": 3,
+                        "debug": true
+                    }], "@babel/preset-react"],
+                    // plugins: [['@babel/plugin-transform-runtime',{
+                    //     "corejs": {
+                    //         "version": 3,
+                    //         "proposals": true
+                    //     },
+                    //     "regenerator": true
+                    // }]],
+                    "ignore": [
+                        "node_modules"
+                    ],
+                    sourceMaps:true
+                })
+                .bundle()
+                .pipe(source(entry.replace(`${workSpaceDir}/js/`,'')))
+                .pipe(buffer())
+                .pipe(sourcemaps.init({loadMaps: true}))
+                .pipe(uglify())
+                // .pipe(gulp.dest(`${distDir}/js/`))
+                // .pipe(gulp.dest(`${distDir}/js/`))
+                // .pipe(rev.manifest())
+                // .on('error', function (err) {
+                //     console.error(' rev.manifest出错了'+err)
+                // })
+                .pipe(sourcemaps.write('./'))
+                .on('error', function (err) {
+                    console.error('sourcemaps.write出错了'+err)
+                })
+                .pipe(gulp.dest(`${distDir}/js/`))
+                .pipe(gutil.noop())
+        });
+        eventStream.merge(tasks).on('end', done);
+    })
+})
+// 1.1 B browserify+babel+uglify 处理 没有sourcemap版
+gulp.task('jsBabelUglify', function(done){
+    glob(workSpaceDir+'/js/**.js', function(err, files) {
+        console.log('files',files)
+        if(err) done(err);
+        var tasks = files.map(function(entry) {
+            console.log('entry',entry)
+            return browserify(entry,{debug:true}).transform(babelify,
+                {
+                    presets: [["@babel/preset-env",{
+                        "useBuiltIns": "usage",
+                        "corejs": 3,
+                        "debug": true
+                    }], "@babel/preset-react"],
+                    // plugins: [['@babel/plugin-transform-runtime',{
+                    //     "corejs": {
+                    //         "version": 3,
+                    //         "proposals": true
+                    //     },
+                    //     "regenerator": true
+                    // }]],
+                    "ignore": [
+                        "node_modules"
+                    ],
+                    sourceMaps:true
+                })
+                .bundle()
+                .pipe(source(entry.replace(`${workSpaceDir}/js/`,'')))
+                .pipe(buffer())
+                .pipe(uglify())
+
+                // .pipe(gulp.dest(`${distDir}/js/`))
+                // .pipe(gulp.dest(`${distDir}/js/`))
+                // .pipe(rev.manifest())
+                // .on('error', function (err) {
+                //     console.error(' rev.manifest出错了'+err)
+                // })
+                .pipe(gulp.dest(`${distDir}/js/`))
+                .pipe(gutil.noop())
+        });
+        eventStream.merge(tasks).on('end', done);
+    })
+})
+
+// 1.2 js哈希版本处理
+gulp.task('jsBabelSourcemapUglifyThenHash',['jsBabelSourcemapUglify'],function () {
+        console.log('开始执行js哈希版本处理')
+        return  gulp.src(distDir+'/js/**.js')
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(rev())
+            .pipe(gulp.dest(distDir+'/js/'))
+            .pipe(sourcemaps.write('./'))
+            .on('error', function (err) {
+                console.error('sourcemaps.write出错了'+err)
+            })
+            .pipe(gulp.dest(distDir+'/js/'))
+            .pipe(rev.manifest())
+            .pipe(gulp.dest(distDir+'/js/'))
+    }
+);
+// 1.2 js哈希版本处理 没有sourcemap版
+gulp.task('jsBabelUglifyThenHash',['jsBabelUglify'],function () {
+        console.log('开始执行js哈希版本处理')
+        return  gulp.src(distDir+'/js/**.js')
+            .pipe(rev())
+            .pipe(gulp.dest(distDir+'/js/'))
+            .pipe(rev.manifest())
+            .pipe(gulp.dest(distDir+'/js/'))
+    }
+);
+
+
+
+
+
+
+// 1.3 拷贝workspace/js/notchange中所有文件至拷贝workspace/dist/js/notchange
+gulp.task('copyNotchangeToDist',function () {
+        console.log('开始导出js/notchange 中的所有文件');
+        return gulp.src([workSpaceDir+'/js/notchange/*'])
+            .pipe(gulp.dest(distDir+'/js/notchange'))
+    }
+);
+
+
+// // 清空 dist/js/notchange
+gulp.task("cleanNotchangeJs", function(){
+    console.log('开始清空js/notchange文件夹');
+    return gulp.src([distDir+'/js/notchange'])
+        .pipe(clean());
+});
+
+// 清空 dist/js/notchange
+gulp.task("cleanDist", function(){
+    console.log('开始清空dist');
+    return gulp.src([distDir])
+        .pipe(clean());
+});
+
+// 2、弃用方案
+// gulp build  依次实现 1、babel语法转换 2、加hash 3、压缩混淆 4、启动build后服务
 
 // js sourcemap和babel及hash值
 // gulp.task('sourcemapBabelHashJs', function () {
@@ -541,6 +792,10 @@ gulp.task('sourcemapBabelRuntimeHashJsThenUglifyJs', ['sourcemapBabelRuntimeHash
 
 })
 
+
+
+// 三、css相关
+
 gulp.task('remThenJrAndHashCss', ['cssREM'], function () {
 
     console.log('开始执行css兼容程序')
@@ -644,6 +899,9 @@ gulp.task('jrAndHashCssThenCompressionCssREM', ['remThenJrAndHashCss'], function
 gulp.task('compressionHtmlThenHashHtml',['compressionHtml'], function () {
     return gulp.src([ distDir+'/**/*.json', distDir+'/*.html'])
         .pipe(revCollector())
+        .on('error', function (err) {
+            console.error('compressionHtmlThenHashHtml出错了'+err)
+        })
         .pipe(gulp.dest(distDir));
 });
 
@@ -651,6 +909,9 @@ gulp.task('compressionHtmlThenHashHtml',['compressionHtml'], function () {
 gulp.task('compressionHtml', function () {
     return gulp.src(workSpaceDir+"/*.html")
         .pipe(htmlmin({collapseWhitespace: true}))
+        .on('error', function (err) {
+            console.error('compressionHtml出错了'+err)
+        })
         .pipe(gulp.dest(distDir));
 });
 
@@ -699,7 +960,7 @@ gulp.task('copyNotchangeJsAndBabelPolyfill',['cleanNotchangeJs'], function () {
         console.log('开始导出js/notchange 中的所有文件');
         var polyfill = './node_modules/babel-polyfill/dist/polyfill.min.js';
 
-        return gulp.src([workSpaceDir+'/js/notchange/*.js',polyfill])
+        return gulp.src([workSpaceDir+'/js/notchange/*',polyfill])
             .pipe(gulp.dest(distDir+'/js/notchange'))
     }
 );
@@ -718,12 +979,7 @@ gulp.task("cleanNotchangeImg", function(){
         .pipe(clean());
 });
 
-// 清空 dist/js/notchange
-gulp.task("cleanNotchangeJs", function(){
-    console.log('开始清空js/notchange文件夹');
-    return gulp.src([distDir+'/js/notchange'])
-        .pipe(clean());
-});
+
 
 // 拷贝  workSpace img文件夹 中的文件 至 dist img文件夹下
 gulp.task('copyNotchangeImg', ['cleanNotchangeImg'],function(){
@@ -764,15 +1020,30 @@ gulp.task('showDistAllFile', function() {
 gulp.task('build', ['cleanHTMLCssJsImg'],function (done) {
     // condition = false;
     runSequence(
-        // ['assetRev'],
-        ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
+        ['cleanDist'],
+        ['jsBabelSourcemapUglifyThenHash'],
         ['jrAndHashCssThenCompressionCss'],
         ['compressionHtmlThenHashHtml'],
         ['copyNotchangeImg'],
-        ['copyNotchangeJsAndBabelPolyfill'],
+        ['copyNotchangeToDist'],
         ['showDistAllFile'],
         done);
 });
+
+// 不压缩图片 无SourceMap文件  启动打包后的项目
+gulp.task('build:nosm', ['cleanHTMLCssJsImg'],function (done) {
+    // condition = false;
+    runSequence(
+        ['cleanDist'],
+        ['jsBabelUglifyThenHash'],
+        ['jrAndHashCssThenCompressionCss'],
+        ['compressionHtmlThenHashHtml'],
+        ['copyNotchangeImg'],
+        ['copyNotchangeToDist'],
+        ['showDistAllFile'],
+        done);
+});
+
 // // 不压缩图片 注入Polyfill
 // gulp.task('buildPolyRun', ['cleanHTMLCssJsImg'],function (done) {
 //     // condition = false;
@@ -792,12 +1063,25 @@ gulp.task('build', ['cleanHTMLCssJsImg'],function (done) {
 gulp.task('buildJK', ['cleanHTMLCssJsImg'],function (done) {
     // condition = false;
     runSequence(
-        // ['assetRev'],
-        ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
+        ['cleanDist'],
+        ['jsBabelSourcemapUglifyThenHash'],
         ['jrAndHashCssThenCompressionCss'],
         ['compressionHtmlThenHashHtml'],
         ['copyNotchangeImg'],
-        ['copyNotchangeJsAndBabelPolyfill'],
+        ['copyNotchangeToDist'],
+        done);
+});
+
+// 不压缩图片 不启动打包后的项目 无SourceMap文件 jenkins专用
+gulp.task('buildJK:nosm', ['cleanHTMLCssJsImg'],function (done) {
+    // condition = false;
+    runSequence(
+        ['cleanDist'],
+        ['jsBabelUglifyThenHash'],
+        ['jrAndHashCssThenCompressionCss'],
+        ['compressionHtmlThenHashHtml'],
+        ['copyNotchangeImg'],
+        ['copyNotchangeToDist'],
         done);
 });
 
@@ -807,12 +1091,12 @@ gulp.task('buildJK', ['cleanHTMLCssJsImg'],function (done) {
 gulp.task('buildImg', ['cleanHTMLCssJsImg'],function (done) {
     // condition = false;
     runSequence(
-        // ['assetRev'],
-        ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
+        ['cleanDist'],
+        ['jsBabelSourcemapUglifyThenHash'],
         ['jrAndHashCssThenCompressionCss'],
         ['compressionHtmlThenHashHtml'],
         ['minImg'],
-        ['copyNotchangeJsAndBabelPolyfill'],
+        ['copyNotchangeToDist'],
         done);
 });
 
@@ -820,12 +1104,12 @@ gulp.task('buildImg', ['cleanHTMLCssJsImg'],function (done) {
 gulp.task('buildImgRun', ['cleanHTMLCssJsImg'],function (done) {
     // condition = false;
     runSequence(
-        // ['assetRev'],
-        ['sourcemapBabelRuntimeHashJsThenUglifyJs'],
+        ['cleanDist'],
+        ['jsBabelSourcemapUglifyThenHash'],
         ['jrAndHashCssThenCompressionCss'],
         ['compressionHtmlThenHashHtml'],
         ['minImg'],
-        ['copyNotchangeJsAndBabelPolyfill'],
+        ['copyNotchangeToDist'],
         ['showDistAllFile'],
         done);
 });
