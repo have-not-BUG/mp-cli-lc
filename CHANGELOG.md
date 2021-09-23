@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.0](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.2.1...v3.3.0) (2021-09-23)
+
+
+### Features
+
+* 新增eslint/git commit message检测功能 ([1136429](https://github.com/have-not-BUG/mp-cli-lc/commit/1136429bd202f8252abb7e1f9fc88fae4fc18346))
+* 生成sourceMaps同名的js文件 ([ce21609](https://github.com/have-not-BUG/mp-cli-lc/commit/ce216094af65f60db3f3ec564f6f121c3be0d948))
+
 ### [3.2.1](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.2.0...v3.2.1) (2021-09-23)
 
 ## [3.2.0](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.1.0...v3.2.0) (2021-09-23)
