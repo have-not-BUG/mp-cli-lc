@@ -1,3 +1,4 @@
+/* eslint-disable */
 var gulp = require('gulp');
 var plumber = require('gulp-plumber'); // 实时更新错误不会导致终端gulp运行开启的服务断开
 var connect = require('gulp-connect'); // 在本地开启一个websocket服务，使用liveReload实现实时更新
@@ -22,6 +23,7 @@ var os = require('os');
 var buffer=require('vinyl-buffer');
 var babelify=require('babelify');
 var gutil = require('gulp-util');
+var fs = require('fs');
 
 var ipv4IpLocal = function getLoaclIP() {
     var ipObj = os.networkInterfaces();
@@ -1014,6 +1016,24 @@ gulp.task('showDistAllFile', function() {
     });
 });
 
+// 删除 workspace/js/文件夹下的SourceMap文件
+gulp.task('deleteJSSourcemaps', function(){
+    return  gulp.src(distDir+'/js/**.map')
+        .pipe(clean());
+
+    // return  glob(distDir+'/js/**.map', function(err, files) {
+    //      if(err) done(err);
+    //      console.log('files sourcemap文件：',files)
+    //       files.map(function(filesItem){
+    //         try {
+    //             fs.unlinkSync(filesItem);
+    //             console.log(`删除${filesItem}成功`)
+    //         }catch (err) {
+    //             if (err) throw err;
+    //         }
+    //      })
+    //  })
+})
 
 // 完成一系列流程
 // 不压缩图片 启动打包后的项目
@@ -1030,7 +1050,22 @@ gulp.task('build', ['cleanHTMLCssJsImg'],function (done) {
         done);
 });
 
-// 不压缩图片 无SourceMap文件  启动打包后的项目
+// 不压缩图片 启动打包后的项目，生成SourceMap文件 但最终会删除，以便单独上传SourceMap，与线上文件名对应
+gulp.task('build:rmsm', ['cleanHTMLCssJsImg'],function (done) {
+    // condition = false;
+    runSequence(
+        ['cleanDist'],
+        ['jsBabelSourcemapUglifyThenHash'],
+        ['jrAndHashCssThenCompressionCss'],
+        ['compressionHtmlThenHashHtml'],
+        ['copyNotchangeImg'],
+        ['copyNotchangeToDist'],
+        ['deleteJSSourcemaps'],
+        ['showDistAllFile'],
+        done);
+});
+
+// 不压缩图片 启动打包后的项目,不生成SourceMap文件
 gulp.task('build:nosm', ['cleanHTMLCssJsImg'],function (done) {
     // condition = false;
     runSequence(
@@ -1071,8 +1106,22 @@ gulp.task('buildJK', ['cleanHTMLCssJsImg'],function (done) {
         ['copyNotchangeToDist'],
         done);
 });
+// 不压缩图片 不启动打包后的项目  jenkins专用  生成SourceMap文件 但最终会删除，以便单独上传SourceMap，与线上文件名对应
 
-// 不压缩图片 不启动打包后的项目 无SourceMap文件 jenkins专用
+gulp.task('buildJK:rmsm', ['cleanHTMLCssJsImg'],function (done) {
+    // condition = false;
+    runSequence(
+        ['cleanDist'],
+        ['jsBabelSourcemapUglifyThenHash'],
+        ['jrAndHashCssThenCompressionCss'],
+        ['compressionHtmlThenHashHtml'],
+        ['copyNotchangeImg'],
+        ['copyNotchangeToDist'],
+        ['deleteJSSourcemaps'],
+        done);
+});
+
+// 不压缩图片 不启动打包后的项目  jenkins专用 不生成SourceMap文件
 gulp.task('buildJK:nosm', ['cleanHTMLCssJsImg'],function (done) {
     // condition = false;
     runSequence(

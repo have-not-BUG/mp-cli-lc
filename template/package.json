@@ -7,8 +7,10 @@
     "dev": "gulp",
     "build": "gulp build",
     "build:nosm": "gulp build:nosm",
+    "build:rmsm": "gulp build:rmsm",
     "build:jk": "gulp buildJK",
     "build:jknosm": "gulp buildJK:nosm",
+    "build:jkrmsm": "gulp buildJK:rmsm",
     "build:imgrun": "gulp buildImgRun",
     "build:img": "gulp buildImg"
   },
