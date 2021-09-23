@@ -368,7 +368,9 @@ inquirer.prompt(question).then(answers => {
             }
             await copyFileBeforeCheck(`${__dirname}/../template/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/jQuery.v1.12.4.js`,`${resolve('./')}/workspace/js/notchange/`)
             await copyFileBeforeCheck(`${__dirname}/../gulpfile.js`,`${resolve('./')}/gulpfile.js`)
-            await copyFileBeforeCheck(`${__dirname}/../.gitignore`,`${resolve('./')}/.gitignore`)
+            await copyFileBeforeCheck(`${__dirname}/../template/commitlint.config.js`,`${resolve('./')}/commitlint.config.js`)
+            await copyFileBeforeCheck(`${__dirname}/../template/.gitignore`,`${resolve('./')}/.gitignore`)
+            await copyFileBeforeCheck(`${__dirname}/../template/.eslintrc.js`,`${resolve('./')}/.eslintrc.js`)
 
         }
 

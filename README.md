@@ -30,6 +30,8 @@ mp-cli-lc 名字由来mp表示multiple page，多页面的意思，cli表示脚�
 
 10、文件及接口监控插件支持网速慢提示（仅支持webkit内核），支持断网及重连提示（各常见内核均支持）
 
+11、项目支持`git commit`前进行eslint及git commit message规范检测
+
 
 ### （二）内置的网页问题反馈插件reportself.js具备以下功能:  
 1、有自定义的alert、confirm、prompt及tips方法(具体用法详见reportself.js内注释) 
@@ -55,7 +57,7 @@ mp-cli-lc 名字由来mp表示multiple page，多页面的意思，cli表示脚�
 
 # 二、使用方法
 #### (一)、环境要求
-1、**node版本需低于12**，因为gulp3与node12不兼容。
+1、**node版本需低于12**，因为gulp3与node12不兼容。推荐使用11.15.0
 
 #### （二）、初始化
 1、Windows系统全局安装(建议以管理员身份)  ```npm install mp-cli-lc -g``` mac ```sudo npm install mp-cli-lc -g```；  
