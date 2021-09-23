@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.1.0...v3.2.0) (2021-09-23)
+
+
+### Features
+
+* 1、优化js打包逻辑及sourcemap功能2、优化cli的package.json ([09736c7](https://github.com/have-not-BUG/mp-cli-lc/commit/09736c7e1fac54ca8b127a8b89bb9cd5e3efbbed))
+* 增加gitignore文件 ([99bdaf9](https://github.com/have-not-BUG/mp-cli-lc/commit/99bdaf94b43f0c5a3442eb242d7d3a45bc2673d7))
+
 ## [3.1.0](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.0.5...v3.1.0) (2021-09-08)
 
 
