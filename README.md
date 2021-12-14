@@ -58,6 +58,7 @@ mp-cli-lc 名字由来mp表示multiple page，多页面的意思，cli表示脚�
 # 二、使用方法
 #### (一)、环境要求
 1、**node版本需低于12**，因为gulp3与node12不兼容。推荐使用11.15.0
+2、安装该脚手架时需要从墙外下载资源，因此你的命令行要能够科学上网
 
 #### （二）、初始化
 1、Windows系统全局安装(建议以管理员身份)  ```npm install mp-cli-lc -g``` mac ```sudo npm install mp-cli-lc -g```；  
@@ -103,3 +104,17 @@ b、npm run build:imgrun 或者 gulp buildImgRun --- 压缩图片，启动打包
 
 # 四、变更记录 changelog
 [CHANGELOG](CHANGELOG.md)
+
+# 五、资源说明
+
+1、本脚手架中的`.eslintrc.js`、`.gitignore`及`commitlint.config.js`默认从[这里的仓库](https://github.com/have-not-BUG/mp-cli-lc-config-files) 下载，你可以根据需要自己修改相应配置
+
+2、本脚手架 `mp init`后的样例 [可以查看这里](https://github.com/have-not-BUG/mp-cli-lc-test)
+
+
+# 六、后续计划
+
+1、内置的`gulp-imagemin`里面的 `imagemin-gifsicle`、`imagemin-mozjpeg`、`imagemin-optipng`、`imagemin-svgo`、`imagemin-svgo`、`imagemin-pngquant` 等依赖包的依赖包会从`https://raw.githubusercontent.com`下载资源，其在中国访问很慢，因此需要换成`https://raw.githubusercontents.com`进行加速
+
+2、时间允许将由gulp改为webpack或vite
+
