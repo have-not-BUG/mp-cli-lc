@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-const fse = require('fs-extra')
+// const fse = require('fs-extra')
+const download = require('download-git-repo');
 const Handlebars = require('handlebars')
 // 交互式命令行
 const inquirer = require('inquirer')
@@ -371,11 +372,20 @@ inquirer.prompt(question).then(answers => {
             // await copyFileBeforeCheck(`${__dirname}/../template/commitlint.config.js`,`${resolve('./')}/commitlint.config.js`)
             // await copyFileBeforeCheck(`${__dirname}/../template/.gitignore`,`${resolve('./')}/.gitignore`)
             // await copyFileBeforeCheck(`${__dirname}/../template/.eslintrc.js`,`${resolve('./')}/.eslintrc.js`)
-            const originFilesAndDir=`${__dirname}/../template/configFiles`;
+            // const originFilesAndDir=`${__dirname}/../template/configFiles`;
             const docsFilesAndDir=`${resolve('./')}`
-            await fse.copy(originFilesAndDir,originFilesAndDir )
-                .then(() => console.log(`从${originFilesAndDir}复制至${docsFilesAndDir}成功！`))
-                .catch(err => console.error(`从${originFilesAndDir}复制至${docsFilesAndDir}失败！，原因为${err}`))
+            download('have-not-BUG/mp-cli-lc-config-files',docsFilesAndDir,{},function(err){
+                if(err){
+                    console.log(chalk.red(`从https://github.com/have-not-BUG/mp-cli-lc-config-files 复制至${docsFilesAndDir}失败！，原因为${err}`))
+
+                }else{
+                    console.log(`从https://github.com/have-not-BUG/mp-cli-lc-config-files 复制至${docsFilesAndDir}成功！`)
+                }
+
+            })
+            // await fse.copy(originFilesAndDir,originFilesAndDir )
+            //     .then(() => console.log(`从${originFilesAndDir}复制至${docsFilesAndDir}成功！`))
+            //     .catch(err => console.error(`从${originFilesAndDir}复制至${docsFilesAndDir}失败！，原因为${err}`))
 
         }
 
