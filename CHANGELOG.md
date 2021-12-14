@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.3.2](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.3.1...v3.3.2) (2021-12-14)
+
+
+### Bug Fixes
+
+* 配置文件从github上下载 ([3d2a60a](https://github.com/have-not-BUG/mp-cli-lc/commit/3d2a60a2832daf784aaea3f773db28b0576dbe17))
+
 ### [3.3.1](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.3.0...v3.3.1) (2021-12-14)
 
 
