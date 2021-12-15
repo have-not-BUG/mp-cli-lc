@@ -16,7 +16,16 @@
                 apikey: '{{apikey}}',
                 // silentDev: true, // 开发环境不启用fundebug
                 silentConsole: true,
-                setHttpBody: true
+                setHttpBody: true,
+                filters : [
+                    {
+                        message: /^Script error\.$/
+                    },
+                    {
+                        name: /^ReferenceError$/
+
+                    }
+                ]
             });
         }
     </script>

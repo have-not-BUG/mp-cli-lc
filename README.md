@@ -118,3 +118,5 @@ b、npm run build:imgrun 或者 gulp buildImgRun --- 压缩图片，启动打包
 
 2、时间允许将由gulp改为webpack或vite
 
+3、css重新启用rem或vw适配工具
+
