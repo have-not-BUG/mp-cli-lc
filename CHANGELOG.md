@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.4.0](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.3.3...v3.4.0) (2021-12-15)
+
+
+### Features
+
+* fundebug启用过滤Script error及ReferenceError错误 ([30efa35](https://github.com/have-not-BUG/mp-cli-lc/commit/30efa3508fb4da443cbd70ab474b3a0aa934c73c))
+
 ### [3.3.3](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.3.2...v3.3.3) (2021-12-14)
 
 ### [3.3.2](https://github.com/have-not-BUG/mp-cli-lc/compare/v3.3.1...v3.3.2) (2021-12-14)
