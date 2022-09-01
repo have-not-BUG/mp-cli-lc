@@ -374,6 +374,7 @@ inquirer.prompt(question).then(answers => {
             // await copyFileBeforeCheck(`${__dirname}/../template/.eslintrc.js`,`${resolve('./')}/.eslintrc.js`)
             // const originFilesAndDir=`${__dirname}/../template/configFiles`;
             const docsFilesAndDir=`${resolve('./')}`
+            console.log(`正在从https://github.com/have-not-BUG/mp-cli-lc-config-files 复制文件至${docsFilesAndDir}...`)
             download('have-not-BUG/mp-cli-lc-config-files',docsFilesAndDir,{},function(err){
                 if(err){
                     console.log(chalk.red(`从https://github.com/have-not-BUG/mp-cli-lc-config-files 复制至${docsFilesAndDir}失败！，原因为${err}`))
